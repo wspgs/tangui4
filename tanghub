@@ -1,0 +1,1049 @@
+-- TANG HUB UI Library (black / blue / white)
+
+-- Services.
+local playersService = game:GetService("Players")
+local userInputService = game:GetService("UserInputService")
+local tweenService = game:GetService("TweenService")
+
+-- Constants.
+local THEME = {
+	background = Color3.fromRGB(6, 8, 16),
+	topbar = Color3.fromRGB(9, 13, 28),
+	sidebar = Color3.fromRGB(8, 11, 22),
+	section = Color3.fromRGB(11, 16, 32),
+	element = Color3.fromRGB(17, 24, 46),
+	off = Color3.fromRGB(40, 50, 80),
+	stroke = Color3.fromRGB(28, 48, 92),
+	accent = Color3.fromRGB(37, 99, 235),
+	accent2 = Color3.fromRGB(34, 211, 238),
+	text = Color3.fromRGB(255, 255, 255),
+	subText = Color3.fromRGB(140, 160, 200),
+}
+
+local FONT = Enum.Font.GothamMedium
+local FONT_BOLD = Enum.Font.GothamBold
+
+-- Embedded logo (base64 PNG).
+local LOGO_DATA = "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"
+
+local localPlayer = playersService.LocalPlayer
+
+local TangHub = {}
+local Window = {}
+Window.__index = Window
+
+local Tab = {}
+Tab.__index = Tab
+
+local Section = {}
+Section.__index = Section
+
+local function create(className, properties, parent)
+	local instance = Instance.new(className)
+	for key, value in pairs(properties) do
+		instance[key] = value
+	end
+	instance.Parent = parent
+	return instance
+end
+
+local function round(parent, radius)
+	return create("UICorner", { CornerRadius = UDim.new(0, radius or 6) }, parent)
+end
+
+local function padding(parent, amount)
+	return create("UIPadding", {
+		PaddingTop = UDim.new(0, amount),
+		PaddingBottom = UDim.new(0, amount),
+		PaddingLeft = UDim.new(0, amount),
+		PaddingRight = UDim.new(0, amount),
+	}, parent)
+end
+
+local function tween(instance, properties, duration)
+	local info = TweenInfo.new(duration or 0.15, Enum.EasingStyle.Quad)
+	local playing = tweenService:Create(instance, info, properties)
+	playing:Play()
+	return playing
+end
+
+-- Apply a two-color gradient (base color is reset to white so the gradient shows true).
+local function gradient(parent, from, to, rotation)
+	if parent:IsA("UIStroke") then
+		parent.Color = Color3.new(1, 1, 1)
+	elseif parent:IsA("GuiObject") then
+		parent.BackgroundColor3 = Color3.new(1, 1, 1)
+	end
+	return create("UIGradient", {
+		Color = ColorSequence.new(from, to),
+		Rotation = rotation or 0,
+	}, parent)
+end
+
+-- Resolve the logo: rbxassetid, local file, embedded data, or download from LogoUrl.
+local function resolveLogo(options)
+	local logo = options.Logo or "TangHub/logo.png"
+	if string.find(logo, "rbxassetid", 1, true) then
+		return logo
+	end
+
+	pcall(makefolder, "TangHub")
+
+	local data = options.LogoData or LOGO_DATA
+	if not isfile(logo) and data and data ~= "" then
+		pcall(writefile, logo, base64decode(data))
+	end
+
+	if not isfile(logo) and options.LogoUrl then
+		local success, response = pcall(request, { Url = options.LogoUrl, Method = "GET" })
+		if success and response and response.Success then
+			writefile(logo, response.Body)
+		end
+	end
+
+	if isfile(logo) then
+		local success, asset = pcall(getcustomasset, logo)
+		if success then
+			return asset
+		end
+	end
+
+	return nil
+end
+
+local function newLabel(parent, text, properties)
+	local data = {
+		BackgroundTransparency = 1,
+		Text = text or "",
+		Font = FONT,
+		TextSize = 13,
+		TextColor3 = THEME.text,
+		TextXAlignment = Enum.TextXAlignment.Left,
+	}
+	for key, value in pairs(properties or {}) do
+		data[key] = value
+	end
+	return create("TextLabel", data, parent)
+end
+
+local function getGuiParent()
+	local success, container = pcall(function()
+		return gethui()
+	end)
+	if success and container then
+		return container
+	end
+
+	success, container = pcall(function()
+		return game:GetService("CoreGui")
+	end)
+	if success and container then
+		return container
+	end
+
+	return localPlayer:WaitForChild("PlayerGui")
+end
+
+local function isPointer(input)
+	return input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch
+end
+
+local function isMove(input)
+	return input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch
+end
+
+-- Drag a target by a handle. Returns a function that reports total distance moved.
+local function makeDraggable(handle, target)
+	local dragging, dragStart, startPosition
+	local moved = 0
+
+	handle.InputBegan:Connect(function(input)
+		if not isPointer(input) then
+			return
+		end
+		dragging = true
+		moved = 0
+		dragStart = input.Position
+		startPosition = target.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end)
+
+	userInputService.InputChanged:Connect(function(input)
+		if not dragging or not isMove(input) then
+			return
+		end
+		local delta = input.Position - dragStart
+		moved = math.max(moved, delta.Magnitude)
+		target.Position = UDim2.new(
+			startPosition.X.Scale,
+			startPosition.X.Offset + delta.X,
+			startPosition.Y.Scale,
+			startPosition.Y.Offset + delta.Y
+		)
+	end)
+
+	return function()
+		return moved
+	end
+end
+
+local function makeResizable(grip, target, minSize, maxSize)
+	local resizing, dragStart, startSize
+
+	grip.InputBegan:Connect(function(input)
+		if not isPointer(input) then
+			return
+		end
+		resizing = true
+		dragStart = input.Position
+		startSize = target.AbsoluteSize
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				resizing = false
+			end
+		end)
+	end)
+
+	userInputService.InputChanged:Connect(function(input)
+		if not resizing or not isMove(input) then
+			return
+		end
+		local delta = input.Position - dragStart
+		target.Size = UDim2.fromOffset(
+			math.clamp(startSize.X + delta.X, minSize.X, maxSize.X),
+			math.clamp(startSize.Y + delta.Y, minSize.Y, maxSize.Y)
+		)
+	end)
+end
+
+-- Show the loading screen, then reveal the window and toggle button.
+local function runLoading(self, title)
+	local loading = create("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(320, 210),
+		BackgroundColor3 = THEME.background,
+		BorderSizePixel = 0,
+		ZIndex = 50,
+	}, self.gui)
+	round(loading, 8)
+	gradient(create("UIStroke", { Thickness = 1.5 }, loading), THEME.accent2, THEME.accent, 45)
+
+	if self.logo then
+		create("ImageLabel", {
+			AnchorPoint = Vector2.new(0.5, 0),
+			Position = UDim2.new(0.5, 0, 0, 10),
+			Size = UDim2.fromOffset(84, 84),
+			BackgroundTransparency = 1,
+			Image = self.logo,
+			ZIndex = 51,
+		}, loading)
+	end
+
+	newLabel(loading, title, {
+		Position = UDim2.fromOffset(0, 100),
+		Size = UDim2.new(1, 0, 0, 28),
+		Font = FONT_BOLD,
+		TextSize = 22,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		ZIndex = 51,
+	})
+
+	local status = newLabel(loading, "Loading...", {
+		Position = UDim2.fromOffset(0, 134),
+		Size = UDim2.new(1, 0, 0, 16),
+		TextSize = 12,
+		TextColor3 = THEME.subText,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		ZIndex = 51,
+	})
+
+	local bar = create("Frame", {
+		Position = UDim2.new(0, 20, 0, 170),
+		Size = UDim2.new(1, -40, 0, 8),
+		BackgroundColor3 = THEME.off,
+		BorderSizePixel = 0,
+		ZIndex = 51,
+	}, loading)
+	round(bar, 4)
+
+	local fill = create("Frame", {
+		Size = UDim2.fromScale(0, 1),
+		BackgroundColor3 = THEME.accent,
+		BorderSizePixel = 0,
+		ZIndex = 52,
+	}, bar)
+	round(fill, 4)
+	gradient(fill, THEME.accent, THEME.accent2, 0)
+
+	local steps = {
+		{ "Loading UI...", 0.35 },
+		{ "Loading modules...", 0.7 },
+		{ "Almost ready...", 1 },
+	}
+	for _, step in ipairs(steps) do
+		status.Text = step[1]
+		tween(fill, { Size = UDim2.fromScale(step[2], 1) }, 0.4)
+		task.wait(0.5)
+	end
+
+	loading:Destroy()
+	self.main.Visible = true
+	self.toggleButton.Visible = true
+end
+
+---Create a new window (shows a loading screen first).
+---@param options table Title, Subtitle, Size, MinSize, MaxSize, ToggleKey, Logo, LogoData, LogoUrl
+function TangHub.new(options)
+	options = options or {}
+
+	if getgenv().TangHubInstance then
+		pcall(function()
+			getgenv().TangHubInstance:Destroy()
+		end)
+	end
+
+	local self = setmetatable({}, Window)
+	self.tabs = {}
+	self.activeTab = nil
+	self.connections = {}
+	self.logo = resolveLogo(options)
+
+	local title = options.Title or "TANG HUB"
+	local size = options.Size or Vector2.new(580, 360)
+	local minSize = options.MinSize or Vector2.new(460, 280)
+	local maxSize = options.MaxSize or Vector2.new(920, 640)
+	local toggleKey = options.ToggleKey or Enum.KeyCode.RightShift
+
+	self.gui = create("ScreenGui", {
+		Name = "TangHub",
+		ResetOnSpawn = false,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+		IgnoreGuiInset = true,
+	}, getGuiParent())
+
+	self.main = create("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(size.X, size.Y),
+		BackgroundColor3 = THEME.background,
+		BorderSizePixel = 0,
+		Visible = false,
+	}, self.gui)
+	round(self.main, 8)
+	gradient(self.main, Color3.fromRGB(10, 18, 40), Color3.fromRGB(4, 5, 10), 60)
+	gradient(create("UIStroke", { Thickness = 1.5 }, self.main), THEME.accent2, THEME.accent, 45)
+
+	-- Top bar.
+	local topbar = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 42),
+		BackgroundColor3 = THEME.topbar,
+		BorderSizePixel = 0,
+	}, self.main)
+	round(topbar, 8)
+	create("Frame", {
+		Position = UDim2.new(0, 0, 1, -8),
+		Size = UDim2.new(1, 0, 0, 8),
+		BackgroundColor3 = THEME.topbar,
+		BorderSizePixel = 0,
+	}, topbar)
+	local accentLine = create("Frame", {
+		Position = UDim2.new(0, 0, 1, 0),
+		Size = UDim2.new(1, 0, 0, 2),
+		BorderSizePixel = 0,
+		ZIndex = 2,
+	}, topbar)
+	gradient(accentLine, THEME.accent, THEME.accent2, 0)
+
+	-- Logo in the top bar.
+	if self.logo then
+		create("ImageLabel", {
+			Position = UDim2.fromOffset(10, 6),
+			Size = UDim2.fromOffset(30, 30),
+			BackgroundTransparency = 1,
+			Image = self.logo,
+		}, topbar)
+	end
+
+	newLabel(topbar, title, {
+		Position = UDim2.fromOffset(48, 5),
+		Size = UDim2.new(0.6, 0, 0, 20),
+		Font = FONT_BOLD,
+		TextSize = 16,
+	})
+	newLabel(topbar, options.Subtitle or "v1.0", {
+		Position = UDim2.fromOffset(48, 23),
+		Size = UDim2.new(0.6, 0, 0, 14),
+		TextSize = 11,
+		TextColor3 = THEME.accent,
+	})
+
+	local closeButton = create("TextButton", {
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -10, 0.5, 0),
+		Size = UDim2.fromOffset(28, 28),
+		BackgroundTransparency = 1,
+		Text = "X",
+		Font = FONT_BOLD,
+		TextSize = 16,
+		TextColor3 = THEME.subText,
+	}, topbar)
+	closeButton.MouseEnter:Connect(function()
+		tween(closeButton, { TextColor3 = THEME.text })
+	end)
+	closeButton.MouseLeave:Connect(function()
+		tween(closeButton, { TextColor3 = THEME.subText })
+	end)
+	-- Close only hides the window; the toggle button brings it back.
+	closeButton.MouseButton1Click:Connect(function()
+		self.main.Visible = false
+	end)
+
+	makeDraggable(topbar, self.main)
+
+	-- Body.
+	local body = create("Frame", {
+		Position = UDim2.fromOffset(0, 44),
+		Size = UDim2.new(1, 0, 1, -44),
+		BackgroundTransparency = 1,
+	}, self.main)
+
+	local sidebar = create("Frame", {
+		Position = UDim2.fromOffset(8, 8),
+		Size = UDim2.new(0, 150, 1, -16),
+		BackgroundColor3 = THEME.sidebar,
+		BorderSizePixel = 0,
+	}, body)
+	round(sidebar, 6)
+
+	self.tabList = create("ScrollingFrame", {
+		Position = UDim2.fromOffset(6, 6),
+		Size = UDim2.new(1, -12, 1, -62),
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		ScrollBarThickness = 0,
+		CanvasSize = UDim2.new(),
+		AutomaticCanvasSize = Enum.AutomaticSize.Y,
+	}, sidebar)
+	create("UIListLayout", { Padding = UDim.new(0, 4), SortOrder = Enum.SortOrder.LayoutOrder }, self.tabList)
+
+	-- Profile.
+	local profile = create("Frame", {
+		AnchorPoint = Vector2.new(0, 1),
+		Position = UDim2.new(0, 6, 1, -6),
+		Size = UDim2.new(1, -12, 0, 44),
+		BackgroundColor3 = THEME.element,
+		BorderSizePixel = 0,
+	}, sidebar)
+	round(profile, 6)
+
+	local avatar = create("ImageLabel", {
+		Position = UDim2.fromOffset(6, 6),
+		Size = UDim2.fromOffset(32, 32),
+		BackgroundColor3 = THEME.off,
+		BorderSizePixel = 0,
+	}, profile)
+	round(avatar, 16)
+	task.spawn(function()
+		local success, image = pcall(function()
+			return playersService:GetUserThumbnailAsync(
+				localPlayer.UserId,
+				Enum.ThumbnailType.HeadShot,
+				Enum.ThumbnailSize.Size100x100
+			)
+		end)
+		if success then
+			avatar.Image = image
+		end
+	end)
+	newLabel(profile, localPlayer.DisplayName, {
+		Position = UDim2.fromOffset(44, 0),
+		Size = UDim2.new(1, -50, 1, 0),
+		TextTruncate = Enum.TextTruncate.AtEnd,
+	})
+
+	self.content = create("Frame", {
+		Position = UDim2.fromOffset(166, 8),
+		Size = UDim2.new(1, -174, 1, -16),
+		BackgroundTransparency = 1,
+	}, body)
+
+	-- Resize grip.
+	local grip = create("TextButton", {
+		AnchorPoint = Vector2.new(1, 1),
+		Position = UDim2.new(1, -2, 1, -2),
+		Size = UDim2.fromOffset(18, 18),
+		BackgroundTransparency = 1,
+		Text = "◢",
+		TextSize = 14,
+		Font = FONT,
+		TextColor3 = THEME.accent,
+		ZIndex = 10,
+	}, self.main)
+	makeResizable(grip, self.main, minSize, maxSize)
+
+	-- Floating toggle button (draggable, click to show/hide).
+	self.toggleButton = create("TextButton", {
+		Name = "ToggleButton",
+		Position = UDim2.new(0, 16, 0.5, 0),
+		Size = UDim2.fromOffset(58, 58),
+		BackgroundColor3 = THEME.background,
+		AutoButtonColor = false,
+		Text = self.logo and "" or "T",
+		Font = FONT_BOLD,
+		TextSize = 26,
+		TextColor3 = THEME.text,
+		Visible = false,
+	}, self.gui)
+	round(self.toggleButton, 29)
+	gradient(create("UIStroke", { Thickness = 2.5 }, self.toggleButton), THEME.accent2, THEME.accent, 45)
+
+	if self.logo then
+		local toggleIcon = create("ImageLabel", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.new(1, -10, 1, -10),
+			BackgroundTransparency = 1,
+			Image = self.logo,
+		}, self.toggleButton)
+		round(toggleIcon, 24)
+	end
+
+	local getMoved = makeDraggable(self.toggleButton, self.toggleButton)
+	self.toggleButton.MouseButton1Click:Connect(function()
+		if getMoved() > 6 then
+			return
+		end
+		self.main.Visible = not self.main.Visible
+	end)
+
+	-- Toggle key.
+	table.insert(
+		self.connections,
+		userInputService.InputBegan:Connect(function(input, processed)
+			if not processed and input.KeyCode == toggleKey then
+				self.main.Visible = not self.main.Visible
+			end
+		end)
+	)
+
+	getgenv().TangHubInstance = self
+	task.spawn(runLoading, self, title)
+	return self
+end
+
+---Remove the UI.
+function Window:Destroy()
+	for _, connection in ipairs(self.connections) do
+		connection:Disconnect()
+	end
+	self.gui:Destroy()
+	getgenv().TangHubInstance = nil
+end
+
+---Show or hide the window.
+function Window:SetVisible(state)
+	self.main.Visible = state
+end
+
+function Window:selectTab(tab)
+	if self.activeTab then
+		local old = self.activeTab
+		old.page.Visible = false
+		tween(old.button, { BackgroundTransparency = 1 })
+		old.nameLabel.TextColor3 = THEME.subText
+		if old.icon then
+			old.icon.ImageColor3 = THEME.subText
+		end
+	end
+
+	self.activeTab = tab
+	tab.page.Visible = true
+	tween(tab.button, { BackgroundTransparency = 0 })
+	tab.nameLabel.TextColor3 = THEME.text
+	if tab.icon then
+		tab.icon.ImageColor3 = THEME.text
+	end
+end
+
+---Add a tab to the sidebar.
+---@param options table Name, Icon (rbxassetid string, optional)
+function Window:AddTab(options)
+	if type(options) == "string" then
+		options = { Name = options }
+	end
+
+	local tab = setmetatable({}, Tab)
+	tab.window = self
+	tab.counts = { Left = 0, Right = 0 }
+
+	tab.button = create("TextButton", {
+		Size = UDim2.new(1, 0, 0, 34),
+		BackgroundColor3 = THEME.accent,
+		BackgroundTransparency = 1,
+		AutoButtonColor = false,
+		Text = "",
+		LayoutOrder = #self.tabs,
+	}, self.tabList)
+	round(tab.button, 6)
+	gradient(tab.button, THEME.accent, THEME.accent2, 0)
+
+	local textOffset = 12
+	if options.Icon then
+		tab.icon = create("ImageLabel", {
+			Position = UDim2.fromOffset(10, 8),
+			Size = UDim2.fromOffset(18, 18),
+			BackgroundTransparency = 1,
+			Image = options.Icon,
+			ImageColor3 = THEME.subText,
+		}, tab.button)
+		textOffset = 36
+	end
+
+	tab.nameLabel = newLabel(tab.button, options.Name or "Tab", {
+		Position = UDim2.fromOffset(textOffset, 0),
+		Size = UDim2.new(1, -textOffset - 4, 1, 0),
+		TextColor3 = THEME.subText,
+	})
+
+	tab.page = create("Frame", {
+		Size = UDim2.fromScale(1, 1),
+		BackgroundTransparency = 1,
+		Visible = false,
+	}, self.content)
+
+	local function newColumn(position)
+		local column = create("ScrollingFrame", {
+			Position = position,
+			Size = UDim2.new(0.5, -4, 1, 0),
+			BackgroundTransparency = 1,
+			BorderSizePixel = 0,
+			ScrollBarThickness = 3,
+			ScrollBarImageColor3 = THEME.accent,
+			CanvasSize = UDim2.new(),
+			AutomaticCanvasSize = Enum.AutomaticSize.Y,
+		}, tab.page)
+		create("UIListLayout", { Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }, column)
+		create("UIPadding", { PaddingRight = UDim.new(0, 5) }, column)
+		return column
+	end
+
+	tab.columns = {
+		Left = newColumn(UDim2.fromScale(0, 0)),
+		Right = newColumn(UDim2.new(0.5, 4, 0, 0)),
+	}
+
+	tab.button.MouseButton1Click:Connect(function()
+		self:selectTab(tab)
+	end)
+
+	table.insert(self.tabs, tab)
+	if not self.activeTab then
+		self:selectTab(tab)
+	end
+
+	return tab
+end
+
+---Add a section (card) to a tab.
+---@param options table Name, Side ("Left" or "Right", optional)
+function Tab:AddSection(options)
+	if type(options) == "string" then
+		options = { Name = options }
+	end
+
+	local side = options.Side
+	if side ~= "Left" and side ~= "Right" then
+		side = self.counts.Left <= self.counts.Right and "Left" or "Right"
+	end
+	self.counts[side] += 1
+
+	local section = setmetatable({}, Section)
+	section.order = 0
+
+	section.frame = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundColor3 = THEME.section,
+		BorderSizePixel = 0,
+		LayoutOrder = self.counts[side],
+	}, self.columns[side])
+	round(section.frame, 6)
+	create("UIStroke", { Color = THEME.stroke, Thickness = 1 }, section.frame)
+	padding(section.frame, 8)
+	create("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder }, section.frame)
+
+	newLabel(section.frame, options.Name or "Section", {
+		Size = UDim2.new(1, 0, 0, 18),
+		Font = FONT_BOLD,
+		TextColor3 = THEME.accent2,
+		LayoutOrder = 0,
+	})
+
+	section.container = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundTransparency = 1,
+		LayoutOrder = 1,
+	}, section.frame)
+	create("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder }, section.container)
+
+	return section
+end
+
+function Section:newRow(height)
+	self.order += 1
+	local row = create("Frame", {
+		Size = UDim2.new(1, 0, 0, height),
+		BackgroundColor3 = THEME.element,
+		BorderSizePixel = 0,
+		LayoutOrder = self.order,
+	}, self.container)
+	round(row, 6)
+	return row
+end
+
+---Add plain text.
+function Section:AddLabel(text)
+	local row = self:newRow(26)
+	local label = newLabel(row, text, {
+		Position = UDim2.fromOffset(10, 0),
+		Size = UDim2.new(1, -20, 1, 0),
+		TextColor3 = THEME.subText,
+	})
+	return {
+		Set = function(_, value)
+			label.Text = value
+		end,
+	}
+end
+
+---Add a button.
+---@param options table Name, Callback
+function Section:AddButton(options)
+	local row = self:newRow(32)
+	local button = create("TextButton", {
+		Size = UDim2.fromScale(1, 1),
+		BackgroundTransparency = 1,
+		Text = options.Name or "Button",
+		Font = FONT,
+		TextSize = 13,
+		TextColor3 = THEME.text,
+		AutoButtonColor = false,
+	}, row)
+
+	button.MouseButton1Click:Connect(function()
+		row.BackgroundColor3 = THEME.accent
+		tween(row, { BackgroundColor3 = THEME.element }, 0.3)
+		if options.Callback then
+			task.spawn(options.Callback)
+		end
+	end)
+end
+
+---Add a toggle.
+---@param options table Name, Default, Callback
+function Section:AddToggle(options)
+	local state = options.Default == true
+	local row = self:newRow(34)
+
+	newLabel(row, options.Name or "Toggle", {
+		Position = UDim2.fromOffset(10, 0),
+		Size = UDim2.new(1, -60, 1, 0),
+	})
+
+	local switch = create("TextButton", {
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -10, 0.5, 0),
+		Size = UDim2.fromOffset(38, 20),
+		BackgroundColor3 = THEME.off,
+		AutoButtonColor = false,
+		Text = "",
+	}, row)
+	round(switch, 10)
+
+	local knob = create("Frame", {
+		Position = UDim2.fromOffset(3, 3),
+		Size = UDim2.fromOffset(14, 14),
+		BackgroundColor3 = THEME.text,
+		BorderSizePixel = 0,
+	}, switch)
+	round(knob, 7)
+
+	local toggle = {}
+
+	local function render()
+		tween(switch, { BackgroundColor3 = state and THEME.accent or THEME.off })
+		tween(knob, { Position = state and UDim2.fromOffset(21, 3) or UDim2.fromOffset(3, 3) })
+	end
+
+	function toggle:Set(value, silent)
+		state = value
+		render()
+		if not silent and options.Callback then
+			task.spawn(options.Callback, state)
+		end
+	end
+
+	function toggle:Get()
+		return state
+	end
+
+	switch.MouseButton1Click:Connect(function()
+		toggle:Set(not state)
+	end)
+
+	toggle:Set(state, true)
+	return toggle
+end
+
+---Add a slider.
+---@param options table Name, Min, Max, Default, Increment, Callback
+function Section:AddSlider(options)
+	local min = options.Min or 0
+	local max = options.Max or 100
+	local step = options.Increment or 1
+	local value = math.clamp(options.Default or min, min, max)
+	local row = self:newRow(48)
+
+	newLabel(row, options.Name or "Slider", {
+		Position = UDim2.fromOffset(10, 4),
+		Size = UDim2.new(1, -70, 0, 20),
+	})
+	local valueLabel = newLabel(row, "", {
+		AnchorPoint = Vector2.new(1, 0),
+		Position = UDim2.new(1, -10, 0, 4),
+		Size = UDim2.fromOffset(56, 20),
+		TextXAlignment = Enum.TextXAlignment.Right,
+		TextColor3 = THEME.accent,
+	})
+
+	local bar = create("Frame", {
+		Position = UDim2.new(0, 10, 0, 32),
+		Size = UDim2.new(1, -20, 0, 6),
+		BackgroundColor3 = THEME.off,
+		BorderSizePixel = 0,
+	}, row)
+	round(bar, 3)
+	local fill = create("Frame", {
+		Size = UDim2.fromScale(0, 1),
+		BackgroundColor3 = THEME.accent,
+		BorderSizePixel = 0,
+	}, bar)
+	round(fill, 3)
+	gradient(fill, THEME.accent, THEME.accent2, 0)
+
+	local hitbox = create("TextButton", {
+		Position = UDim2.new(0, 10, 0, 24),
+		Size = UDim2.new(1, -20, 0, 22),
+		BackgroundTransparency = 1,
+		Text = "",
+	}, row)
+
+	local slider = {}
+
+	function slider:Set(newValue, silent)
+		newValue = math.clamp(math.floor((newValue - min) / step + 0.5) * step + min, min, max)
+		value = newValue
+		fill.Size = UDim2.fromScale((value - min) / (max - min), 1)
+		valueLabel.Text = tostring(math.floor(value * 100 + 0.5) / 100)
+		if not silent and options.Callback then
+			task.spawn(options.Callback, value)
+		end
+	end
+
+	function slider:Get()
+		return value
+	end
+
+	local dragging = false
+	local function update(positionX)
+		local alpha = math.clamp((positionX - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
+		slider:Set(min + (max - min) * alpha)
+	end
+
+	hitbox.InputBegan:Connect(function(input)
+		if isPointer(input) then
+			dragging = true
+			update(input.Position.X)
+		end
+	end)
+	userInputService.InputEnded:Connect(function(input)
+		if isPointer(input) then
+			dragging = false
+		end
+	end)
+	userInputService.InputChanged:Connect(function(input)
+		if dragging and isMove(input) then
+			update(input.Position.X)
+		end
+	end)
+
+	slider:Set(value, true)
+	return slider
+end
+
+---Add a dropdown.
+---@param options table Name, Values, Default, Callback
+function Section:AddDropdown(options)
+	local values = options.Values or {}
+	local selected = options.Default or values[1]
+
+	self.order += 1
+	local holder = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 34),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundColor3 = THEME.element,
+		BorderSizePixel = 0,
+		ClipsDescendants = true,
+		LayoutOrder = self.order,
+	}, self.container)
+	round(holder, 6)
+	create("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder }, holder)
+
+	local header = create("TextButton", {
+		Size = UDim2.new(1, 0, 0, 34),
+		BackgroundTransparency = 1,
+		Text = "",
+		LayoutOrder = 0,
+	}, holder)
+	newLabel(header, options.Name or "Dropdown", {
+		Position = UDim2.fromOffset(10, 0),
+		Size = UDim2.new(0.5, -10, 1, 0),
+	})
+	local valueLabel = newLabel(header, tostring(selected or "-"), {
+		AnchorPoint = Vector2.new(1, 0),
+		Position = UDim2.new(1, -28, 0, 0),
+		Size = UDim2.new(0.5, -30, 1, 0),
+		TextXAlignment = Enum.TextXAlignment.Right,
+		TextColor3 = THEME.accent,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+	})
+	local arrow = newLabel(header, "v", {
+		AnchorPoint = Vector2.new(1, 0),
+		Position = UDim2.new(1, -10, 0, 0),
+		Size = UDim2.fromOffset(14, 34),
+		TextXAlignment = Enum.TextXAlignment.Center,
+		TextColor3 = THEME.subText,
+	})
+
+	local list = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundTransparency = 1,
+		Visible = false,
+		LayoutOrder = 1,
+	}, holder)
+	create("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder }, list)
+	create("UIPadding", { PaddingBottom = UDim.new(0, 4) }, list)
+
+	local dropdown = {}
+
+	function dropdown:Set(value, silent)
+		selected = value
+		valueLabel.Text = tostring(value)
+		for _, child in ipairs(list:GetChildren()) do
+			if child:IsA("TextButton") then
+				child.TextColor3 = child.Name == tostring(value) and THEME.accent or THEME.subText
+			end
+		end
+		if not silent and options.Callback then
+			task.spawn(options.Callback, value)
+		end
+	end
+
+	function dropdown:Get()
+		return selected
+	end
+
+	function dropdown:Refresh(newValues)
+		values = newValues
+		for _, child in ipairs(list:GetChildren()) do
+			if child:IsA("TextButton") then
+				child:Destroy()
+			end
+		end
+		for index, value in ipairs(values) do
+			local option = create("TextButton", {
+				Name = tostring(value),
+				Size = UDim2.new(1, 0, 0, 26),
+				BackgroundTransparency = 1,
+				Text = tostring(value),
+				Font = FONT,
+				TextSize = 13,
+				TextColor3 = THEME.subText,
+				LayoutOrder = index,
+			}, list)
+			option.MouseButton1Click:Connect(function()
+				dropdown:Set(value)
+				list.Visible = false
+				arrow.Text = "v"
+			end)
+		end
+		dropdown:Set(selected, true)
+	end
+
+	header.MouseButton1Click:Connect(function()
+		list.Visible = not list.Visible
+		arrow.Text = list.Visible and "^" or "v"
+	end)
+
+	dropdown:Refresh(values)
+	return dropdown
+end
+
+---Add a text box.
+---@param options table Name, Default, Placeholder, Callback
+function Section:AddInput(options)
+	local row = self:newRow(34)
+	newLabel(row, options.Name or "Input", {
+		Position = UDim2.fromOffset(10, 0),
+		Size = UDim2.new(0.5, -10, 1, 0),
+	})
+
+	local box = create("TextBox", {
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -8, 0.5, 0),
+		Size = UDim2.new(0.5, -12, 0, 22),
+		BackgroundColor3 = THEME.background,
+		BorderSizePixel = 0,
+		Text = options.Default or "",
+		PlaceholderText = options.Placeholder or "",
+		PlaceholderColor3 = THEME.subText,
+		Font = FONT,
+		TextSize = 12,
+		TextColor3 = THEME.text,
+		ClearTextOnFocus = false,
+	}, row)
+	round(box, 4)
+
+	box.FocusLost:Connect(function()
+		if options.Callback then
+			task.spawn(options.Callback, box.Text)
+		end
+	end)
+
+	return box
+end
+
+-- Script starts here.
+local window = TangHub.new({
+	Title = "TANG HUB",
+	Subtitle = "v1.0",
+	Size = Vector2.new(580, 360),
+	ToggleKey = Enum.KeyCode.RightShift,
+})
+
+local mainTab = window:AddTab({ Name = "Main" })
+local mainSection = mainTab:AddSection({ Name = "General", Side = "Left" })
+
+-- mainSection:AddToggle({ Name = "Auto Farm", Default = false, Callback = function(state) end })
+-- mainSection:AddButton({ Name = "Click", Callback = function() end })
+-- mainSection:AddSlider({ Name = "Speed", Min = 16, Max = 100, Default = 16, Callback = function(value) end })
+-- mainSection:AddDropdown({ Name = "Zone", Values = { "A", "B" }, Default = "A", Callback = function(value) end })
+-- mainSection:AddInput({ Name = "Name", Placeholder = "...", Callback = function(text) end })
+-- mainSection:AddLabel("text")
