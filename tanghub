@@ -1,1049 +1,2335 @@
--- TANG HUB UI Library (black / blue / white)
-
--- Services.
-local playersService = game:GetService("Players")
-local userInputService = game:GetService("UserInputService")
+local LOGO_BASE64 = "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"
 local tweenService = game:GetService("TweenService")
-
--- Constants.
-local THEME = {
-	background = Color3.fromRGB(6, 8, 16),
-	topbar = Color3.fromRGB(9, 13, 28),
-	sidebar = Color3.fromRGB(8, 11, 22),
-	section = Color3.fromRGB(11, 16, 32),
-	element = Color3.fromRGB(17, 24, 46),
-	off = Color3.fromRGB(40, 50, 80),
-	stroke = Color3.fromRGB(28, 48, 92),
-	accent = Color3.fromRGB(37, 99, 235),
-	accent2 = Color3.fromRGB(34, 211, 238),
-	text = Color3.fromRGB(255, 255, 255),
-	subText = Color3.fromRGB(140, 160, 200),
+local userInputService = game:GetService("UserInputService")
+local textService = game:GetService("TextService")
+local coreGui = game:GetService("CoreGui")
+local guiService = game:GetService("GuiService")
+local runService = game:GetService("RunService")
+local statsService = game:GetService("Stats")
+local THEMES = {
+Dark = {
+background = Color3.fromRGB(30, 31, 35),
+sidebar = Color3.fromRGB(24, 25, 29),
+header = Color3.fromRGB(50, 51, 56),
+element = Color3.fromRGB(40, 41, 46),
+elementHover = Color3.fromRGB(47, 48, 54),
+field = Color3.fromRGB(62, 63, 70),
+track = Color3.fromRGB(84, 86, 96),
+divider = Color3.fromRGB(55, 56, 62),
+accent = Color3.fromRGB(10, 132, 255),
+accentHover = Color3.fromRGB(64, 156, 255),
+destructive = Color3.fromRGB(255, 69, 58),
+destructiveHover = Color3.fromRGB(74, 38, 40),
+text = Color3.fromRGB(240, 241, 245),
+subText = Color3.fromRGB(142, 145, 155),
+tabHover = Color3.fromRGB(38, 39, 45),
+},
+Light = {
+background = Color3.fromRGB(242, 243, 247),
+sidebar = Color3.fromRGB(230, 232, 238),
+header = Color3.fromRGB(236, 238, 243),
+element = Color3.fromRGB(252, 252, 254),
+elementHover = Color3.fromRGB(245, 246, 250),
+field = Color3.fromRGB(232, 235, 241),
+track = Color3.fromRGB(205, 209, 219),
+divider = Color3.fromRGB(222, 225, 232),
+accent = Color3.fromRGB(10, 132, 255),
+accentHover = Color3.fromRGB(64, 156, 255),
+destructive = Color3.fromRGB(255, 69, 58),
+destructiveHover = Color3.fromRGB(254, 226, 226),
+text = Color3.fromRGB(28, 30, 38),
+subText = Color3.fromRGB(115, 120, 134),
+tabHover = Color3.fromRGB(214, 217, 226),
+},
+Midnight = {
+background = Color3.fromRGB(20, 18, 32),
+sidebar = Color3.fromRGB(15, 13, 25),
+header = Color3.fromRGB(28, 25, 44),
+element = Color3.fromRGB(32, 29, 50),
+elementHover = Color3.fromRGB(41, 37, 63),
+field = Color3.fromRGB(44, 40, 66),
+track = Color3.fromRGB(70, 64, 100),
+divider = Color3.fromRGB(50, 46, 74),
+accent = Color3.fromRGB(139, 92, 246),
+accentHover = Color3.fromRGB(167, 139, 250),
+destructive = Color3.fromRGB(239, 68, 68),
+destructiveHover = Color3.fromRGB(66, 34, 48),
+text = Color3.fromRGB(237, 233, 254),
+subText = Color3.fromRGB(160, 152, 190),
+tabHover = Color3.fromRGB(36, 32, 56),
+},
+Rose = {
+background = Color3.fromRGB(253, 242, 245),
+sidebar = Color3.fromRGB(250, 228, 235),
+header = Color3.fromRGB(251, 235, 240),
+element = Color3.fromRGB(255, 247, 249),
+elementHover = Color3.fromRGB(255, 252, 253),
+field = Color3.fromRGB(248, 232, 238),
+track = Color3.fromRGB(232, 200, 212),
+divider = Color3.fromRGB(242, 222, 230),
+accent = Color3.fromRGB(219, 39, 119),
+accentHover = Color3.fromRGB(236, 72, 153),
+destructive = Color3.fromRGB(239, 68, 68),
+destructiveHover = Color3.fromRGB(254, 226, 226),
+text = Color3.fromRGB(60, 24, 38),
+subText = Color3.fromRGB(148, 100, 120),
+tabHover = Color3.fromRGB(244, 214, 224),
+},
+Emerald = {
+background = Color3.fromRGB(17, 28, 24),
+sidebar = Color3.fromRGB(12, 21, 18),
+header = Color3.fromRGB(23, 37, 32),
+element = Color3.fromRGB(27, 43, 37),
+elementHover = Color3.fromRGB(34, 54, 46),
+field = Color3.fromRGB(37, 58, 50),
+track = Color3.fromRGB(60, 90, 78),
+divider = Color3.fromRGB(44, 68, 58),
+accent = Color3.fromRGB(16, 185, 129),
+accentHover = Color3.fromRGB(52, 211, 153),
+destructive = Color3.fromRGB(239, 68, 68),
+destructiveHover = Color3.fromRGB(66, 36, 38),
+text = Color3.fromRGB(225, 244, 236),
+subText = Color3.fromRGB(140, 175, 160),
+tabHover = Color3.fromRGB(31, 49, 42),
+},
 }
-
-local FONT = Enum.Font.GothamMedium
+local THEME_NAMES = { "Dark", "Light", "Midnight", "Rose", "Emerald" }
+local THEME_PROPERTIES = { "BackgroundColor3", "TextColor3", "ImageColor3", "Color", "ScrollBarImageColor3" }
+local THEME = {}
+for key, color in pairs(THEMES.Dark) do
+THEME[key] = color
+end
+local FONT = Enum.Font.Gotham
+local FONT_MEDIUM = Enum.Font.GothamMedium
 local FONT_BOLD = Enum.Font.GothamBold
-
--- Embedded logo (base64 PNG).
-local LOGO_DATA = "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"
-
-local localPlayer = playersService.LocalPlayer
-
-local TangHub = {}
+local SIDEBAR_WIDTH = 190
+local HEADER_HEIGHT = 64
+local TAB_HEIGHT = 34
+local TAB_PADDING = 4
+local TEXT_WIDTH = 250
+local REST_POSITION = UDim2.fromScale(0.5, 0.5)
+local START_POSITION = UDim2.new(0.5, 28, 0.5, 0)
+local WINDOW_SIZE = UDim2.fromOffset(720, 470)
+local WINDOW_SIZE_LARGE = UDim2.fromOffset(900, 580)
+local ISLAND_WIDTH = 200
+local ISLAND_HEIGHT = 38
+local ISLAND_ANNOUNCE_WIDTH = 300
+local ISLAND_EXPANDED_WIDTH = 340
+local ISLAND_ANNOUNCE_HEIGHT = 58
+local GENIE_STRIPS = 48
+local GENIE_LAG = 0.55
+local GENIE_DURATION = 0.55
+local GLASS = 0
+local Library = {}
 local Window = {}
 Window.__index = Window
-
 local Tab = {}
 Tab.__index = Tab
-
-local Section = {}
-Section.__index = Section
-
-local function create(className, properties, parent)
-	local instance = Instance.new(className)
-	for key, value in pairs(properties) do
-		instance[key] = value
-	end
-	instance.Parent = parent
-	return instance
+local function create(className, properties, children)
+local instance = Instance.new(className)
+for key, value in pairs(properties or {}) do
+instance[key] = value
 end
-
-local function round(parent, radius)
-	return create("UICorner", { CornerRadius = UDim.new(0, radius or 6) }, parent)
+for _, child in ipairs(children or {}) do
+child.Parent = instance
 end
-
-local function padding(parent, amount)
-	return create("UIPadding", {
-		PaddingTop = UDim.new(0, amount),
-		PaddingBottom = UDim.new(0, amount),
-		PaddingLeft = UDim.new(0, amount),
-		PaddingRight = UDim.new(0, amount),
-	}, parent)
+return instance
 end
-
-local function tween(instance, properties, duration)
-	local info = TweenInfo.new(duration or 0.15, Enum.EasingStyle.Quad)
-	local playing = tweenService:Create(instance, info, properties)
-	playing:Play()
-	return playing
+local function tween(instance, duration, goal, style, direction)
+local info = TweenInfo.new(duration, style or Enum.EasingStyle.Quint, direction or Enum.EasingDirection.Out)
+local playing = tweenService:Create(instance, info, goal)
+playing:Play()
+return playing
 end
-
--- Apply a two-color gradient (base color is reset to white so the gradient shows true).
-local function gradient(parent, from, to, rotation)
-	if parent:IsA("UIStroke") then
-		parent.Color = Color3.new(1, 1, 1)
-	elseif parent:IsA("GuiObject") then
-		parent.BackgroundColor3 = Color3.new(1, 1, 1)
-	end
-	return create("UIGradient", {
-		Color = ColorSequence.new(from, to),
-		Rotation = rotation or 0,
-	}, parent)
+local function addCorner(instance, radius)
+return create("UICorner", { CornerRadius = UDim.new(0, radius), Parent = instance })
 end
-
--- Resolve the logo: rbxassetid, local file, embedded data, or download from LogoUrl.
-local function resolveLogo(options)
-	local logo = options.Logo or "TangHub/logo.png"
-	if string.find(logo, "rbxassetid", 1, true) then
-		return logo
-	end
-
-	pcall(makefolder, "TangHub")
-
-	local data = options.LogoData or LOGO_DATA
-	if not isfile(logo) and data and data ~= "" then
-		pcall(writefile, logo, base64decode(data))
-	end
-
-	if not isfile(logo) and options.LogoUrl then
-		local success, response = pcall(request, { Url = options.LogoUrl, Method = "GET" })
-		if success and response and response.Success then
-			writefile(logo, response.Body)
-		end
-	end
-
-	if isfile(logo) then
-		local success, asset = pcall(getcustomasset, logo)
-		if success then
-			return asset
-		end
-	end
-
-	return nil
-end
-
-local function newLabel(parent, text, properties)
-	local data = {
-		BackgroundTransparency = 1,
-		Text = text or "",
-		Font = FONT,
-		TextSize = 13,
-		TextColor3 = THEME.text,
-		TextXAlignment = Enum.TextXAlignment.Left,
-	}
-	for key, value in pairs(properties or {}) do
-		data[key] = value
-	end
-	return create("TextLabel", data, parent)
-end
-
-local function getGuiParent()
-	local success, container = pcall(function()
-		return gethui()
-	end)
-	if success and container then
-		return container
-	end
-
-	success, container = pcall(function()
-		return game:GetService("CoreGui")
-	end)
-	if success and container then
-		return container
-	end
-
-	return localPlayer:WaitForChild("PlayerGui")
-end
-
-local function isPointer(input)
-	return input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch
-end
-
-local function isMove(input)
-	return input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch
-end
-
--- Drag a target by a handle. Returns a function that reports total distance moved.
-local function makeDraggable(handle, target)
-	local dragging, dragStart, startPosition
-	local moved = 0
-
-	handle.InputBegan:Connect(function(input)
-		if not isPointer(input) then
-			return
-		end
-		dragging = true
-		moved = 0
-		dragStart = input.Position
-		startPosition = target.Position
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end)
-
-	userInputService.InputChanged:Connect(function(input)
-		if not dragging or not isMove(input) then
-			return
-		end
-		local delta = input.Position - dragStart
-		moved = math.max(moved, delta.Magnitude)
-		target.Position = UDim2.new(
-			startPosition.X.Scale,
-			startPosition.X.Offset + delta.X,
-			startPosition.Y.Scale,
-			startPosition.Y.Offset + delta.Y
-		)
-	end)
-
-	return function()
-		return moved
-	end
-end
-
-local function makeResizable(grip, target, minSize, maxSize)
-	local resizing, dragStart, startSize
-
-	grip.InputBegan:Connect(function(input)
-		if not isPointer(input) then
-			return
-		end
-		resizing = true
-		dragStart = input.Position
-		startSize = target.AbsoluteSize
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				resizing = false
-			end
-		end)
-	end)
-
-	userInputService.InputChanged:Connect(function(input)
-		if not resizing or not isMove(input) then
-			return
-		end
-		local delta = input.Position - dragStart
-		target.Size = UDim2.fromOffset(
-			math.clamp(startSize.X + delta.X, minSize.X, maxSize.X),
-			math.clamp(startSize.Y + delta.Y, minSize.Y, maxSize.Y)
-		)
-	end)
-end
-
--- Show the loading screen, then reveal the window and toggle button.
-local function runLoading(self, title)
-	local loading = create("Frame", {
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromOffset(320, 210),
-		BackgroundColor3 = THEME.background,
-		BorderSizePixel = 0,
-		ZIndex = 50,
-	}, self.gui)
-	round(loading, 8)
-	gradient(create("UIStroke", { Thickness = 1.5 }, loading), THEME.accent2, THEME.accent, 45)
-
-	if self.logo then
-		create("ImageLabel", {
-			AnchorPoint = Vector2.new(0.5, 0),
-			Position = UDim2.new(0.5, 0, 0, 10),
-			Size = UDim2.fromOffset(84, 84),
-			BackgroundTransparency = 1,
-			Image = self.logo,
-			ZIndex = 51,
-		}, loading)
-	end
-
-	newLabel(loading, title, {
-		Position = UDim2.fromOffset(0, 100),
-		Size = UDim2.new(1, 0, 0, 28),
-		Font = FONT_BOLD,
-		TextSize = 22,
-		TextXAlignment = Enum.TextXAlignment.Center,
-		ZIndex = 51,
-	})
-
-	local status = newLabel(loading, "Loading...", {
-		Position = UDim2.fromOffset(0, 134),
-		Size = UDim2.new(1, 0, 0, 16),
-		TextSize = 12,
-		TextColor3 = THEME.subText,
-		TextXAlignment = Enum.TextXAlignment.Center,
-		ZIndex = 51,
-	})
-
-	local bar = create("Frame", {
-		Position = UDim2.new(0, 20, 0, 170),
-		Size = UDim2.new(1, -40, 0, 8),
-		BackgroundColor3 = THEME.off,
-		BorderSizePixel = 0,
-		ZIndex = 51,
-	}, loading)
-	round(bar, 4)
-
-	local fill = create("Frame", {
-		Size = UDim2.fromScale(0, 1),
-		BackgroundColor3 = THEME.accent,
-		BorderSizePixel = 0,
-		ZIndex = 52,
-	}, bar)
-	round(fill, 4)
-	gradient(fill, THEME.accent, THEME.accent2, 0)
-
-	local steps = {
-		{ "Loading UI...", 0.35 },
-		{ "Loading modules...", 0.7 },
-		{ "Almost ready...", 1 },
-	}
-	for _, step in ipairs(steps) do
-		status.Text = step[1]
-		tween(fill, { Size = UDim2.fromScale(step[2], 1) }, 0.4)
-		task.wait(0.5)
-	end
-
-	loading:Destroy()
-	self.main.Visible = true
-	self.toggleButton.Visible = true
-end
-
----Create a new window (shows a loading screen first).
----@param options table Title, Subtitle, Size, MinSize, MaxSize, ToggleKey, Logo, LogoData, LogoUrl
-function TangHub.new(options)
-	options = options or {}
-
-	if getgenv().TangHubInstance then
-		pcall(function()
-			getgenv().TangHubInstance:Destroy()
-		end)
-	end
-
-	local self = setmetatable({}, Window)
-	self.tabs = {}
-	self.activeTab = nil
-	self.connections = {}
-	self.logo = resolveLogo(options)
-
-	local title = options.Title or "TANG HUB"
-	local size = options.Size or Vector2.new(580, 360)
-	local minSize = options.MinSize or Vector2.new(460, 280)
-	local maxSize = options.MaxSize or Vector2.new(920, 640)
-	local toggleKey = options.ToggleKey or Enum.KeyCode.RightShift
-
-	self.gui = create("ScreenGui", {
-		Name = "TangHub",
-		ResetOnSpawn = false,
-		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-		IgnoreGuiInset = true,
-	}, getGuiParent())
-
-	self.main = create("Frame", {
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromOffset(size.X, size.Y),
-		BackgroundColor3 = THEME.background,
-		BorderSizePixel = 0,
-		Visible = false,
-	}, self.gui)
-	round(self.main, 8)
-	gradient(self.main, Color3.fromRGB(10, 18, 40), Color3.fromRGB(4, 5, 10), 60)
-	gradient(create("UIStroke", { Thickness = 1.5 }, self.main), THEME.accent2, THEME.accent, 45)
-
-	-- Top bar.
-	local topbar = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 42),
-		BackgroundColor3 = THEME.topbar,
-		BorderSizePixel = 0,
-	}, self.main)
-	round(topbar, 8)
-	create("Frame", {
-		Position = UDim2.new(0, 0, 1, -8),
-		Size = UDim2.new(1, 0, 0, 8),
-		BackgroundColor3 = THEME.topbar,
-		BorderSizePixel = 0,
-	}, topbar)
-	local accentLine = create("Frame", {
-		Position = UDim2.new(0, 0, 1, 0),
-		Size = UDim2.new(1, 0, 0, 2),
-		BorderSizePixel = 0,
-		ZIndex = 2,
-	}, topbar)
-	gradient(accentLine, THEME.accent, THEME.accent2, 0)
-
-	-- Logo in the top bar.
-	if self.logo then
-		create("ImageLabel", {
-			Position = UDim2.fromOffset(10, 6),
-			Size = UDim2.fromOffset(30, 30),
-			BackgroundTransparency = 1,
-			Image = self.logo,
-		}, topbar)
-	end
-
-	newLabel(topbar, title, {
-		Position = UDim2.fromOffset(48, 5),
-		Size = UDim2.new(0.6, 0, 0, 20),
-		Font = FONT_BOLD,
-		TextSize = 16,
-	})
-	newLabel(topbar, options.Subtitle or "v1.0", {
-		Position = UDim2.fromOffset(48, 23),
-		Size = UDim2.new(0.6, 0, 0, 14),
-		TextSize = 11,
-		TextColor3 = THEME.accent,
-	})
-
-	local closeButton = create("TextButton", {
-		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, -10, 0.5, 0),
-		Size = UDim2.fromOffset(28, 28),
-		BackgroundTransparency = 1,
-		Text = "X",
-		Font = FONT_BOLD,
-		TextSize = 16,
-		TextColor3 = THEME.subText,
-	}, topbar)
-	closeButton.MouseEnter:Connect(function()
-		tween(closeButton, { TextColor3 = THEME.text })
-	end)
-	closeButton.MouseLeave:Connect(function()
-		tween(closeButton, { TextColor3 = THEME.subText })
-	end)
-	-- Close only hides the window; the toggle button brings it back.
-	closeButton.MouseButton1Click:Connect(function()
-		self.main.Visible = false
-	end)
-
-	makeDraggable(topbar, self.main)
-
-	-- Body.
-	local body = create("Frame", {
-		Position = UDim2.fromOffset(0, 44),
-		Size = UDim2.new(1, 0, 1, -44),
-		BackgroundTransparency = 1,
-	}, self.main)
-
-	local sidebar = create("Frame", {
-		Position = UDim2.fromOffset(8, 8),
-		Size = UDim2.new(0, 150, 1, -16),
-		BackgroundColor3 = THEME.sidebar,
-		BorderSizePixel = 0,
-	}, body)
-	round(sidebar, 6)
-
-	self.tabList = create("ScrollingFrame", {
-		Position = UDim2.fromOffset(6, 6),
-		Size = UDim2.new(1, -12, 1, -62),
-		BackgroundTransparency = 1,
-		BorderSizePixel = 0,
-		ScrollBarThickness = 0,
-		CanvasSize = UDim2.new(),
-		AutomaticCanvasSize = Enum.AutomaticSize.Y,
-	}, sidebar)
-	create("UIListLayout", { Padding = UDim.new(0, 4), SortOrder = Enum.SortOrder.LayoutOrder }, self.tabList)
-
-	-- Profile.
-	local profile = create("Frame", {
-		AnchorPoint = Vector2.new(0, 1),
-		Position = UDim2.new(0, 6, 1, -6),
-		Size = UDim2.new(1, -12, 0, 44),
-		BackgroundColor3 = THEME.element,
-		BorderSizePixel = 0,
-	}, sidebar)
-	round(profile, 6)
-
-	local avatar = create("ImageLabel", {
-		Position = UDim2.fromOffset(6, 6),
-		Size = UDim2.fromOffset(32, 32),
-		BackgroundColor3 = THEME.off,
-		BorderSizePixel = 0,
-	}, profile)
-	round(avatar, 16)
-	task.spawn(function()
-		local success, image = pcall(function()
-			return playersService:GetUserThumbnailAsync(
-				localPlayer.UserId,
-				Enum.ThumbnailType.HeadShot,
-				Enum.ThumbnailSize.Size100x100
-			)
-		end)
-		if success then
-			avatar.Image = image
-		end
-	end)
-	newLabel(profile, localPlayer.DisplayName, {
-		Position = UDim2.fromOffset(44, 0),
-		Size = UDim2.new(1, -50, 1, 0),
-		TextTruncate = Enum.TextTruncate.AtEnd,
-	})
-
-	self.content = create("Frame", {
-		Position = UDim2.fromOffset(166, 8),
-		Size = UDim2.new(1, -174, 1, -16),
-		BackgroundTransparency = 1,
-	}, body)
-
-	-- Resize grip.
-	local grip = create("TextButton", {
-		AnchorPoint = Vector2.new(1, 1),
-		Position = UDim2.new(1, -2, 1, -2),
-		Size = UDim2.fromOffset(18, 18),
-		BackgroundTransparency = 1,
-		Text = "◢",
-		TextSize = 14,
-		Font = FONT,
-		TextColor3 = THEME.accent,
-		ZIndex = 10,
-	}, self.main)
-	makeResizable(grip, self.main, minSize, maxSize)
-
-	-- Floating toggle button (draggable, click to show/hide).
-	self.toggleButton = create("TextButton", {
-		Name = "ToggleButton",
-		Position = UDim2.new(0, 16, 0.5, 0),
-		Size = UDim2.fromOffset(58, 58),
-		BackgroundColor3 = THEME.background,
-		AutoButtonColor = false,
-		Text = self.logo and "" or "T",
-		Font = FONT_BOLD,
-		TextSize = 26,
-		TextColor3 = THEME.text,
-		Visible = false,
-	}, self.gui)
-	round(self.toggleButton, 29)
-	gradient(create("UIStroke", { Thickness = 2.5 }, self.toggleButton), THEME.accent2, THEME.accent, 45)
-
-	if self.logo then
-		local toggleIcon = create("ImageLabel", {
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.fromScale(0.5, 0.5),
-			Size = UDim2.new(1, -10, 1, -10),
-			BackgroundTransparency = 1,
-			Image = self.logo,
-		}, self.toggleButton)
-		round(toggleIcon, 24)
-	end
-
-	local getMoved = makeDraggable(self.toggleButton, self.toggleButton)
-	self.toggleButton.MouseButton1Click:Connect(function()
-		if getMoved() > 6 then
-			return
-		end
-		self.main.Visible = not self.main.Visible
-	end)
-
-	-- Toggle key.
-	table.insert(
-		self.connections,
-		userInputService.InputBegan:Connect(function(input, processed)
-			if not processed and input.KeyCode == toggleKey then
-				self.main.Visible = not self.main.Visible
-			end
-		end)
-	)
-
-	getgenv().TangHubInstance = self
-	task.spawn(runLoading, self, title)
-	return self
-end
-
----Remove the UI.
-function Window:Destroy()
-	for _, connection in ipairs(self.connections) do
-		connection:Disconnect()
-	end
-	self.gui:Destroy()
-	getgenv().TangHubInstance = nil
-end
-
----Show or hide the window.
-function Window:SetVisible(state)
-	self.main.Visible = state
-end
-
-function Window:selectTab(tab)
-	if self.activeTab then
-		local old = self.activeTab
-		old.page.Visible = false
-		tween(old.button, { BackgroundTransparency = 1 })
-		old.nameLabel.TextColor3 = THEME.subText
-		if old.icon then
-			old.icon.ImageColor3 = THEME.subText
-		end
-	end
-
-	self.activeTab = tab
-	tab.page.Visible = true
-	tween(tab.button, { BackgroundTransparency = 0 })
-	tab.nameLabel.TextColor3 = THEME.text
-	if tab.icon then
-		tab.icon.ImageColor3 = THEME.text
-	end
-end
-
----Add a tab to the sidebar.
----@param options table Name, Icon (rbxassetid string, optional)
-function Window:AddTab(options)
-	if type(options) == "string" then
-		options = { Name = options }
-	end
-
-	local tab = setmetatable({}, Tab)
-	tab.window = self
-	tab.counts = { Left = 0, Right = 0 }
-
-	tab.button = create("TextButton", {
-		Size = UDim2.new(1, 0, 0, 34),
-		BackgroundColor3 = THEME.accent,
-		BackgroundTransparency = 1,
-		AutoButtonColor = false,
-		Text = "",
-		LayoutOrder = #self.tabs,
-	}, self.tabList)
-	round(tab.button, 6)
-	gradient(tab.button, THEME.accent, THEME.accent2, 0)
-
-	local textOffset = 12
-	if options.Icon then
-		tab.icon = create("ImageLabel", {
-			Position = UDim2.fromOffset(10, 8),
-			Size = UDim2.fromOffset(18, 18),
-			BackgroundTransparency = 1,
-			Image = options.Icon,
-			ImageColor3 = THEME.subText,
-		}, tab.button)
-		textOffset = 36
-	end
-
-	tab.nameLabel = newLabel(tab.button, options.Name or "Tab", {
-		Position = UDim2.fromOffset(textOffset, 0),
-		Size = UDim2.new(1, -textOffset - 4, 1, 0),
-		TextColor3 = THEME.subText,
-	})
-
-	tab.page = create("Frame", {
-		Size = UDim2.fromScale(1, 1),
-		BackgroundTransparency = 1,
-		Visible = false,
-	}, self.content)
-
-	local function newColumn(position)
-		local column = create("ScrollingFrame", {
-			Position = position,
-			Size = UDim2.new(0.5, -4, 1, 0),
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
-			ScrollBarThickness = 3,
-			ScrollBarImageColor3 = THEME.accent,
-			CanvasSize = UDim2.new(),
-			AutomaticCanvasSize = Enum.AutomaticSize.Y,
-		}, tab.page)
-		create("UIListLayout", { Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }, column)
-		create("UIPadding", { PaddingRight = UDim.new(0, 5) }, column)
-		return column
-	end
-
-	tab.columns = {
-		Left = newColumn(UDim2.fromScale(0, 0)),
-		Right = newColumn(UDim2.new(0.5, 4, 0, 0)),
-	}
-
-	tab.button.MouseButton1Click:Connect(function()
-		self:selectTab(tab)
-	end)
-
-	table.insert(self.tabs, tab)
-	if not self.activeTab then
-		self:selectTab(tab)
-	end
-
-	return tab
-end
-
----Add a section (card) to a tab.
----@param options table Name, Side ("Left" or "Right", optional)
-function Tab:AddSection(options)
-	if type(options) == "string" then
-		options = { Name = options }
-	end
-
-	local side = options.Side
-	if side ~= "Left" and side ~= "Right" then
-		side = self.counts.Left <= self.counts.Right and "Left" or "Right"
-	end
-	self.counts[side] += 1
-
-	local section = setmetatable({}, Section)
-	section.order = 0
-
-	section.frame = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundColor3 = THEME.section,
-		BorderSizePixel = 0,
-		LayoutOrder = self.counts[side],
-	}, self.columns[side])
-	round(section.frame, 6)
-	create("UIStroke", { Color = THEME.stroke, Thickness = 1 }, section.frame)
-	padding(section.frame, 8)
-	create("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder }, section.frame)
-
-	newLabel(section.frame, options.Name or "Section", {
-		Size = UDim2.new(1, 0, 0, 18),
-		Font = FONT_BOLD,
-		TextColor3 = THEME.accent2,
-		LayoutOrder = 0,
-	})
-
-	section.container = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundTransparency = 1,
-		LayoutOrder = 1,
-	}, section.frame)
-	create("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder }, section.container)
-
-	return section
-end
-
-function Section:newRow(height)
-	self.order += 1
-	local row = create("Frame", {
-		Size = UDim2.new(1, 0, 0, height),
-		BackgroundColor3 = THEME.element,
-		BorderSizePixel = 0,
-		LayoutOrder = self.order,
-	}, self.container)
-	round(row, 6)
-	return row
-end
-
----Add plain text.
-function Section:AddLabel(text)
-	local row = self:newRow(26)
-	local label = newLabel(row, text, {
-		Position = UDim2.fromOffset(10, 0),
-		Size = UDim2.new(1, -20, 1, 0),
-		TextColor3 = THEME.subText,
-	})
-	return {
-		Set = function(_, value)
-			label.Text = value
-		end,
-	}
-end
-
----Add a button.
----@param options table Name, Callback
-function Section:AddButton(options)
-	local row = self:newRow(32)
-	local button = create("TextButton", {
-		Size = UDim2.fromScale(1, 1),
-		BackgroundTransparency = 1,
-		Text = options.Name or "Button",
-		Font = FONT,
-		TextSize = 13,
-		TextColor3 = THEME.text,
-		AutoButtonColor = false,
-	}, row)
-
-	button.MouseButton1Click:Connect(function()
-		row.BackgroundColor3 = THEME.accent
-		tween(row, { BackgroundColor3 = THEME.element }, 0.3)
-		if options.Callback then
-			task.spawn(options.Callback)
-		end
-	end)
-end
-
----Add a toggle.
----@param options table Name, Default, Callback
-function Section:AddToggle(options)
-	local state = options.Default == true
-	local row = self:newRow(34)
-
-	newLabel(row, options.Name or "Toggle", {
-		Position = UDim2.fromOffset(10, 0),
-		Size = UDim2.new(1, -60, 1, 0),
-	})
-
-	local switch = create("TextButton", {
-		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, -10, 0.5, 0),
-		Size = UDim2.fromOffset(38, 20),
-		BackgroundColor3 = THEME.off,
-		AutoButtonColor = false,
-		Text = "",
-	}, row)
-	round(switch, 10)
-
-	local knob = create("Frame", {
-		Position = UDim2.fromOffset(3, 3),
-		Size = UDim2.fromOffset(14, 14),
-		BackgroundColor3 = THEME.text,
-		BorderSizePixel = 0,
-	}, switch)
-	round(knob, 7)
-
-	local toggle = {}
-
-	local function render()
-		tween(switch, { BackgroundColor3 = state and THEME.accent or THEME.off })
-		tween(knob, { Position = state and UDim2.fromOffset(21, 3) or UDim2.fromOffset(3, 3) })
-	end
-
-	function toggle:Set(value, silent)
-		state = value
-		render()
-		if not silent and options.Callback then
-			task.spawn(options.Callback, state)
-		end
-	end
-
-	function toggle:Get()
-		return state
-	end
-
-	switch.MouseButton1Click:Connect(function()
-		toggle:Set(not state)
-	end)
-
-	toggle:Set(state, true)
-	return toggle
-end
-
----Add a slider.
----@param options table Name, Min, Max, Default, Increment, Callback
-function Section:AddSlider(options)
-	local min = options.Min or 0
-	local max = options.Max or 100
-	local step = options.Increment or 1
-	local value = math.clamp(options.Default or min, min, max)
-	local row = self:newRow(48)
-
-	newLabel(row, options.Name or "Slider", {
-		Position = UDim2.fromOffset(10, 4),
-		Size = UDim2.new(1, -70, 0, 20),
-	})
-	local valueLabel = newLabel(row, "", {
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -10, 0, 4),
-		Size = UDim2.fromOffset(56, 20),
-		TextXAlignment = Enum.TextXAlignment.Right,
-		TextColor3 = THEME.accent,
-	})
-
-	local bar = create("Frame", {
-		Position = UDim2.new(0, 10, 0, 32),
-		Size = UDim2.new(1, -20, 0, 6),
-		BackgroundColor3 = THEME.off,
-		BorderSizePixel = 0,
-	}, row)
-	round(bar, 3)
-	local fill = create("Frame", {
-		Size = UDim2.fromScale(0, 1),
-		BackgroundColor3 = THEME.accent,
-		BorderSizePixel = 0,
-	}, bar)
-	round(fill, 3)
-	gradient(fill, THEME.accent, THEME.accent2, 0)
-
-	local hitbox = create("TextButton", {
-		Position = UDim2.new(0, 10, 0, 24),
-		Size = UDim2.new(1, -20, 0, 22),
-		BackgroundTransparency = 1,
-		Text = "",
-	}, row)
-
-	local slider = {}
-
-	function slider:Set(newValue, silent)
-		newValue = math.clamp(math.floor((newValue - min) / step + 0.5) * step + min, min, max)
-		value = newValue
-		fill.Size = UDim2.fromScale((value - min) / (max - min), 1)
-		valueLabel.Text = tostring(math.floor(value * 100 + 0.5) / 100)
-		if not silent and options.Callback then
-			task.spawn(options.Callback, value)
-		end
-	end
-
-	function slider:Get()
-		return value
-	end
-
-	local dragging = false
-	local function update(positionX)
-		local alpha = math.clamp((positionX - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
-		slider:Set(min + (max - min) * alpha)
-	end
-
-	hitbox.InputBegan:Connect(function(input)
-		if isPointer(input) then
-			dragging = true
-			update(input.Position.X)
-		end
-	end)
-	userInputService.InputEnded:Connect(function(input)
-		if isPointer(input) then
-			dragging = false
-		end
-	end)
-	userInputService.InputChanged:Connect(function(input)
-		if dragging and isMove(input) then
-			update(input.Position.X)
-		end
-	end)
-
-	slider:Set(value, true)
-	return slider
-end
-
----Add a dropdown.
----@param options table Name, Values, Default, Callback
-function Section:AddDropdown(options)
-	local values = options.Values or {}
-	local selected = options.Default or values[1]
-
-	self.order += 1
-	local holder = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 34),
-		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundColor3 = THEME.element,
-		BorderSizePixel = 0,
-		ClipsDescendants = true,
-		LayoutOrder = self.order,
-	}, self.container)
-	round(holder, 6)
-	create("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder }, holder)
-
-	local header = create("TextButton", {
-		Size = UDim2.new(1, 0, 0, 34),
-		BackgroundTransparency = 1,
-		Text = "",
-		LayoutOrder = 0,
-	}, holder)
-	newLabel(header, options.Name or "Dropdown", {
-		Position = UDim2.fromOffset(10, 0),
-		Size = UDim2.new(0.5, -10, 1, 0),
-	})
-	local valueLabel = newLabel(header, tostring(selected or "-"), {
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -28, 0, 0),
-		Size = UDim2.new(0.5, -30, 1, 0),
-		TextXAlignment = Enum.TextXAlignment.Right,
-		TextColor3 = THEME.accent,
-		TextTruncate = Enum.TextTruncate.AtEnd,
-	})
-	local arrow = newLabel(header, "v", {
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -10, 0, 0),
-		Size = UDim2.fromOffset(14, 34),
-		TextXAlignment = Enum.TextXAlignment.Center,
-		TextColor3 = THEME.subText,
-	})
-
-	local list = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundTransparency = 1,
-		Visible = false,
-		LayoutOrder = 1,
-	}, holder)
-	create("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder }, list)
-	create("UIPadding", { PaddingBottom = UDim.new(0, 4) }, list)
-
-	local dropdown = {}
-
-	function dropdown:Set(value, silent)
-		selected = value
-		valueLabel.Text = tostring(value)
-		for _, child in ipairs(list:GetChildren()) do
-			if child:IsA("TextButton") then
-				child.TextColor3 = child.Name == tostring(value) and THEME.accent or THEME.subText
-			end
-		end
-		if not silent and options.Callback then
-			task.spawn(options.Callback, value)
-		end
-	end
-
-	function dropdown:Get()
-		return selected
-	end
-
-	function dropdown:Refresh(newValues)
-		values = newValues
-		for _, child in ipairs(list:GetChildren()) do
-			if child:IsA("TextButton") then
-				child:Destroy()
-			end
-		end
-		for index, value in ipairs(values) do
-			local option = create("TextButton", {
-				Name = tostring(value),
-				Size = UDim2.new(1, 0, 0, 26),
-				BackgroundTransparency = 1,
-				Text = tostring(value),
-				Font = FONT,
-				TextSize = 13,
-				TextColor3 = THEME.subText,
-				LayoutOrder = index,
-			}, list)
-			option.MouseButton1Click:Connect(function()
-				dropdown:Set(value)
-				list.Visible = false
-				arrow.Text = "v"
-			end)
-		end
-		dropdown:Set(selected, true)
-	end
-
-	header.MouseButton1Click:Connect(function()
-		list.Visible = not list.Visible
-		arrow.Text = list.Visible and "^" or "v"
-	end)
-
-	dropdown:Refresh(values)
-	return dropdown
-end
-
----Add a text box.
----@param options table Name, Default, Placeholder, Callback
-function Section:AddInput(options)
-	local row = self:newRow(34)
-	newLabel(row, options.Name or "Input", {
-		Position = UDim2.fromOffset(10, 0),
-		Size = UDim2.new(0.5, -10, 1, 0),
-	})
-
-	local box = create("TextBox", {
-		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, -8, 0.5, 0),
-		Size = UDim2.new(0.5, -12, 0, 22),
-		BackgroundColor3 = THEME.background,
-		BorderSizePixel = 0,
-		Text = options.Default or "",
-		PlaceholderText = options.Placeholder or "",
-		PlaceholderColor3 = THEME.subText,
-		Font = FONT,
-		TextSize = 12,
-		TextColor3 = THEME.text,
-		ClearTextOnFocus = false,
-	}, row)
-	round(box, 4)
-
-	box.FocusLost:Connect(function()
-		if options.Callback then
-			task.spawn(options.Callback, box.Text)
-		end
-	end)
-
-	return box
-end
-
--- Script starts here.
-local window = TangHub.new({
-	Title = "TANG HUB",
-	Subtitle = "v1.0",
-	Size = Vector2.new(580, 360),
-	ToggleKey = Enum.KeyCode.RightShift,
+local function createText(parent, text, size, color, font, alignment)
+return create("TextLabel", {
+BackgroundTransparency = 1,
+Text = text,
+TextSize = size,
+TextColor3 = color,
+Font = font or FONT,
+TextXAlignment = alignment or Enum.TextXAlignment.Left,
+Parent = parent,
 })
-
-local mainTab = window:AddTab({ Name = "Main" })
-local mainSection = mainTab:AddSection({ Name = "General", Side = "Left" })
-
--- mainSection:AddToggle({ Name = "Auto Farm", Default = false, Callback = function(state) end })
--- mainSection:AddButton({ Name = "Click", Callback = function() end })
--- mainSection:AddSlider({ Name = "Speed", Min = 16, Max = 100, Default = 16, Callback = function(value) end })
--- mainSection:AddDropdown({ Name = "Zone", Values = { "A", "B" }, Default = "A", Callback = function(value) end })
--- mainSection:AddInput({ Name = "Name", Placeholder = "...", Callback = function(text) end })
--- mainSection:AddLabel("text")
+end
+local function getGuiParent()
+local success, container = pcall(function()
+return gethui()
+end)
+if success and container then
+return container
+end
+return coreGui
+end
+local function isPointer(input)
+return input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch
+end
+local function pointerPosition(input)
+return Vector2.new(input.Position.X, input.Position.Y) + guiService:GetGuiInset()
+end
+local function ripple(parent, color)
+local mouse = userInputService:GetMouseLocation()
+local circle = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromOffset(mouse.X - parent.AbsolutePosition.X, mouse.Y - parent.AbsolutePosition.Y),
+Size = UDim2.fromOffset(0, 0),
+BackgroundColor3 = color or Color3.new(1, 1, 1),
+BackgroundTransparency = 0.7,
+BorderSizePixel = 0,
+ZIndex = 10,
+Parent = parent,
+})
+addCorner(circle, 999)
+local diameter = math.max(parent.AbsoluteSize.X, parent.AbsoluteSize.Y) * 2
+tween(circle, 0.55, { Size = UDim2.fromOffset(diameter, diameter), BackgroundTransparency = 1 })
+task.delay(0.55, function()
+circle:Destroy()
+end)
+end
+local function getPing()
+local success, value = pcall(function()
+return statsService.Network.ServerStatsItem["Data Ping"]:GetValue()
+end)
+if success and value then
+return math.floor(value)
+end
+return 0
+end
+local function toPixels(position)
+local camera = workspace.CurrentCamera
+local viewport = camera and camera.ViewportSize or Vector2.new(1280, 720)
+return Vector2.new(
+position.X.Scale * viewport.X + position.X.Offset,
+position.Y.Scale * viewport.Y + position.Y.Offset
+)
+end
+local function resolveLogo(source)
+if type(source) ~= "string" or source == "" then
+return nil
+end
+if source == "embedded" then
+local success, content = pcall(function()
+local decode = (crypt and crypt.base64decode) or base64decode
+local path = "TangHub/logo_v1.png"
+if not isfolder("TangHub") then
+makefolder("TangHub")
+end
+if not isfile(path) then
+writefile(path, decode(LOGO_BASE64))
+end
+return getcustomasset(path)
+end)
+if success then
+return content
+end
+return nil
+end
+if string.find(source, "^rbxassetid://") or string.find(source, "^rbxasset://") then
+return source
+end
+if string.find(source, "^%d+$") then
+return "rbxassetid://" .. source
+end
+local path = source
+if string.find(source, "^https?://") then
+path = "TangHub/logo.png"
+pcall(function()
+if not isfolder("TangHub") then
+makefolder("TangHub")
+end
+local response = request({ Url = source, Method = "GET" })
+if response and response.StatusCode == 200 and #response.Body > 0 then
+writefile(path, response.Body)
+end
+end)
+end
+local success, content = pcall(function()
+if isfile(path) then
+return getcustomasset(path)
+end
+end)
+if success then
+return content
+end
+return nil
+end
+function Library.new(options)
+options = options or {}
+local self = setmetatable({}, Window)
+self.tabs = {}
+self.connections = {}
+self.history = {}
+self.historyIndex = 0
+self.token = 0
+self.indicatorY = 0
+self.tabCursor = 0
+self.visible = true
+self.maximized = false
+self.sidebarOpen = true
+self.themeName = "Dark"
+self.capturing = false
+self.toggleKey = options.ToggleKey or Enum.KeyCode.RightShift
+local gui = create("ScreenGui", {
+Name = "TangHub",
+ResetOnSpawn = false,
+IgnoreGuiInset = true,
+DisplayOrder = 100,
+ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+})
+local parented = pcall(function()
+gui.Parent = getGuiParent()
+end)
+if not parented then
+gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+end
+self.gui = gui
+local main = create("CanvasGroup", {
+Name = "Main",
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = WINDOW_SIZE,
+BackgroundColor3 = THEME.background,
+BorderSizePixel = 0,
+GroupTransparency = 1,
+Parent = gui,
+})
+addCorner(main, 14)
+self.main = main
+self.scale = create("UIScale", { Scale = 0.88, Parent = main })
+local shadows = {}
+for _, layer in ipairs({ { grow = 44, alpha = 0.9, offset = 22 }, { grow = 18, alpha = 0.82, offset = 10 } }) do
+local shadow = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+BackgroundColor3 = Color3.new(0, 0, 0),
+BorderSizePixel = 0,
+Visible = false,
+ZIndex = 0,
+Parent = gui,
+})
+addCorner(shadow, 26)
+layer.frame = shadow
+layer.scale = create("UIScale", { Parent = shadow })
+table.insert(shadows, layer)
+end
+self.shadows = shadows
+local body = create("Frame", {
+Position = UDim2.fromOffset(SIDEBAR_WIDTH, 0),
+Size = UDim2.new(1, -SIDEBAR_WIDTH, 1, 0),
+BackgroundTransparency = 1,
+ClipsDescendants = true,
+Parent = main,
+})
+self.body = body
+self.content = create("Frame", {
+Position = UDim2.fromOffset(0, HEADER_HEIGHT),
+Size = UDim2.new(1, 0, 1, -HEADER_HEIGHT),
+BackgroundTransparency = 1,
+ClipsDescendants = true,
+Parent = body,
+})
+local header = create("Frame", {
+Size = UDim2.new(1, 0, 0, HEADER_HEIGHT),
+BackgroundColor3 = THEME.header,
+BorderSizePixel = 0,
+ZIndex = 3,
+Parent = body,
+})
+create("Frame", {
+AnchorPoint = Vector2.new(0, 1),
+Position = UDim2.fromScale(0, 1),
+Size = UDim2.new(1, 0, 0, 1),
+BackgroundColor3 = THEME.divider,
+BorderSizePixel = 0,
+ZIndex = 3,
+Parent = header,
+})
+local headerLeft = create("Frame", {
+Position = UDim2.fromOffset(14, 0),
+Size = UDim2.new(1, -230, 1, 0),
+BackgroundTransparency = 1,
+ZIndex = 4,
+Parent = header,
+})
+self.headerLeft = headerLeft
+local function createNavButton(x, width, parent)
+local button = create("TextButton", {
+Position = UDim2.fromOffset(x, 19),
+Size = UDim2.fromOffset(width, 26),
+BackgroundColor3 = THEME.field,
+BackgroundTransparency = 1,
+Text = "",
+AutoButtonColor = false,
+ZIndex = 5,
+Parent = parent,
+})
+addCorner(button, 7)
+button.MouseEnter:Connect(function()
+tween(button, 0.15, { BackgroundTransparency = 0.3 })
+end)
+button.MouseLeave:Connect(function()
+tween(button, 0.15, { BackgroundTransparency = 1 })
+end)
+return button
+end
+local toggleButton = createNavButton(0, 32, headerLeft)
+local sidebarIcon = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = UDim2.fromOffset(18, 14),
+BackgroundTransparency = 1,
+ZIndex = 6,
+Parent = toggleButton,
+})
+addCorner(sidebarIcon, 3)
+create("UIStroke", { Color = THEME.subText, Thickness = 1.6, Parent = sidebarIcon })
+create("Frame", {
+Position = UDim2.fromOffset(6, 0),
+Size = UDim2.new(0, 2, 1, 0),
+BackgroundColor3 = THEME.subText,
+BorderSizePixel = 0,
+ZIndex = 6,
+Parent = sidebarIcon,
+})
+toggleButton.MouseButton1Click:Connect(function()
+self:setSidebarOpen(not self.sidebarOpen)
+end)
+self.backButton = createNavButton(42, 28, headerLeft)
+self.backLabel = createText(self.backButton, "<", 16, THEME.subText, FONT_BOLD, Enum.TextXAlignment.Center)
+self.backLabel.Size = UDim2.fromScale(1, 1)
+self.backLabel.ZIndex = 6
+self.backButton.MouseButton1Click:Connect(function()
+self:navigate(-1)
+end)
+self.forwardButton = createNavButton(74, 28, headerLeft)
+self.forwardLabel = createText(self.forwardButton, ">", 16, THEME.subText, FONT_BOLD, Enum.TextXAlignment.Center)
+self.forwardLabel.Size = UDim2.fromScale(1, 1)
+self.forwardLabel.ZIndex = 6
+self.forwardButton.MouseButton1Click:Connect(function()
+self:navigate(1)
+end)
+local title = createText(headerLeft, options.Title or "TANG HUB", 16, THEME.text, FONT_BOLD)
+title.Position = UDim2.fromOffset(118, 12)
+title.Size = UDim2.new(1, -118, 0, 22)
+title.ZIndex = 5
+self.titleLabel = title
+local subtitle = createText(headerLeft, options.Subtitle or "", 11, THEME.subText, FONT)
+subtitle.Position = UDim2.fromOffset(118, 34)
+subtitle.Size = UDim2.new(1, -118, 0, 16)
+subtitle.ZIndex = 5
+self.subtitleLabel = subtitle
+local searchHolder = create("Frame", {
+AnchorPoint = Vector2.new(1, 0.5),
+Position = UDim2.new(1, -14, 0.5, 0),
+Size = UDim2.fromOffset(190, 32),
+BackgroundColor3 = THEME.background,
+BorderSizePixel = 0,
+ZIndex = 4,
+Parent = header,
+})
+addCorner(searchHolder, 9)
+local searchStroke = create("UIStroke", {
+Color = THEME.accent,
+Thickness = 1.5,
+Transparency = 1,
+Parent = searchHolder,
+})
+local searchBox = create("TextBox", {
+Position = UDim2.fromOffset(12, 0),
+Size = UDim2.new(1, -24, 1, 0),
+BackgroundTransparency = 1,
+Text = "",
+PlaceholderText = "Search",
+PlaceholderColor3 = THEME.subText,
+TextColor3 = THEME.text,
+TextSize = 13,
+Font = FONT,
+TextXAlignment = Enum.TextXAlignment.Left,
+ClearTextOnFocus = false,
+ZIndex = 5,
+Parent = searchHolder,
+})
+self.searchBox = searchBox
+searchBox.Focused:Connect(function()
+tween(searchStroke, 0.2, { Transparency = 0 })
+tween(searchHolder, 0.3, { Size = UDim2.fromOffset(230, 32) })
+end)
+searchBox.FocusLost:Connect(function()
+tween(searchStroke, 0.2, { Transparency = 1 })
+tween(searchHolder, 0.3, { Size = UDim2.fromOffset(190, 32) })
+end)
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+if self.currentTab then
+self.currentTab:filter(searchBox.Text)
+end
+end)
+local sidebar = create("Frame", {
+Size = UDim2.new(0, SIDEBAR_WIDTH, 1, 0),
+BackgroundColor3 = THEME.sidebar,
+BorderSizePixel = 0,
+ClipsDescendants = true,
+ZIndex = 2,
+Parent = main,
+})
+self.sidebar = sidebar
+create("Frame", {
+AnchorPoint = Vector2.new(1, 0),
+Position = UDim2.fromScale(1, 0),
+Size = UDim2.new(0, 1, 1, 0),
+BackgroundColor3 = THEME.divider,
+BorderSizePixel = 0,
+Parent = sidebar,
+})
+self.tabHolder = create("ScrollingFrame", {
+Position = UDim2.fromOffset(10, 56),
+Size = UDim2.new(0, SIDEBAR_WIDTH - 20, 1, -66),
+BackgroundTransparency = 1,
+BorderSizePixel = 0,
+ScrollBarThickness = 0,
+CanvasSize = UDim2.new(),
+Parent = sidebar,
+})
+self.indicator = create("Frame", {
+Size = UDim2.new(1, 0, 0, TAB_HEIGHT),
+BackgroundColor3 = THEME.accent,
+BorderSizePixel = 0,
+Visible = false,
+ZIndex = 1,
+Parent = self.tabHolder,
+})
+addCorner(self.indicator, 8)
+local function addDot(color, x, callback)
+local dot = create("TextButton", {
+Position = UDim2.fromOffset(x, 22),
+Size = UDim2.fromOffset(12, 12),
+BackgroundColor3 = color,
+Text = "",
+AutoButtonColor = false,
+ZIndex = 20,
+Parent = main,
+})
+addCorner(dot, 999)
+dot.MouseEnter:Connect(function()
+tween(dot, 0.15, { Size = UDim2.fromOffset(14, 14), Position = UDim2.fromOffset(x - 1, 21) })
+end)
+dot.MouseLeave:Connect(function()
+tween(dot, 0.15, { Size = UDim2.fromOffset(12, 12), Position = UDim2.fromOffset(x, 22) })
+end)
+dot.MouseButton1Click:Connect(callback)
+end
+addDot(Color3.fromRGB(255, 95, 86), 16, function()
+self:destroy()
+end)
+addDot(Color3.fromRGB(255, 189, 46), 36, function()
+self:setVisible(false)
+end)
+addDot(Color3.fromRGB(39, 201, 63), 56, function()
+self.maximized = not self.maximized
+tween(main, 0.45, { Size = self.maximized and WINDOW_SIZE_LARGE or WINDOW_SIZE })
+tween(self.scale, 0.45, { Scale = self:getFitScale() })
+end)
+self.notifyHolder = create("Frame", {
+AnchorPoint = Vector2.new(1, 1),
+Position = UDim2.new(1, -16, 1, -16),
+Size = UDim2.new(0, 280, 1, -32),
+BackgroundTransparency = 1,
+Parent = gui,
+})
+create("UIListLayout", {
+Padding = UDim.new(0, 8),
+SortOrder = Enum.SortOrder.LayoutOrder,
+VerticalAlignment = Enum.VerticalAlignment.Bottom,
+Parent = self.notifyHolder,
+})
+local dragStart, startPosition
+local function bindWindowDrag(frame)
+frame.InputBegan:Connect(function(input)
+if isPointer(input) then
+dragStart = input.Position
+startPosition = main.Position
+end
+end)
+end
+bindWindowDrag(header)
+local dragZone = create("Frame", {
+Size = UDim2.new(1, 0, 0, 48),
+BackgroundTransparency = 1,
+Parent = sidebar,
+})
+bindWindowDrag(dragZone)
+table.insert(self.connections, userInputService.InputChanged:Connect(function(input)
+if dragStart and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+local delta = input.Position - dragStart
+main.Position = UDim2.new(startPosition.X.Scale, startPosition.X.Offset + delta.X, startPosition.Y.Scale, startPosition.Y.Offset + delta.Y)
+end
+end))
+table.insert(self.connections, userInputService.InputEnded:Connect(function(input)
+if isPointer(input) then
+dragStart = nil
+end
+end))
+table.insert(self.connections, userInputService.InputBegan:Connect(function(input, processed)
+if not processed and not self.capturing and input.KeyCode == self.toggleKey then
+self:setVisible(not self.visible)
+end
+end))
+task.defer(function()
+if not self.currentTab and self.tabs[1] then
+self:selectTab(self.tabs[1])
+end
+end)
+self.restPosition = main.Position
+local island = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.new(0.5, 0, 0, 31),
+Size = UDim2.fromOffset(ISLAND_WIDTH, ISLAND_HEIGHT),
+BackgroundColor3 = Color3.new(0, 0, 0),
+BackgroundTransparency = 1,
+BorderSizePixel = 0,
+Visible = false,
+ZIndex = 50,
+Parent = gui,
+})
+addCorner(island, 999)
+self.island = island
+self.islandStroke = create("UIStroke", { Color = Color3.new(1, 1, 1), Thickness = 2, Transparency = 1, Parent = island })
+self.islandGradient = create("UIGradient", { Parent = self.islandStroke })
+self:updateIslandColors()
+local islandScale = create("UIScale", { Parent = island })
+local islandContent = create("CanvasGroup", {
+Size = UDim2.fromScale(1, 1),
+BackgroundTransparency = 1,
+GroupTransparency = 1,
+BorderSizePixel = 0,
+Parent = island,
+})
+addCorner(islandContent, 999)
+self.islandContent = islandContent
+local islandHolder = create("CanvasGroup", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = UDim2.fromOffset(ISLAND_WIDTH, ISLAND_HEIGHT),
+BackgroundTransparency = 1,
+BorderSizePixel = 0,
+Parent = islandContent,
+})
+self.islandHolder = islandHolder
+local handle = create("Frame", {
+Size = UDim2.fromOffset(46, ISLAND_HEIGHT),
+BackgroundTransparency = 1,
+Parent = islandHolder,
+})
+local cross = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = UDim2.fromOffset(16, 16),
+BackgroundTransparency = 1,
+Parent = handle,
+})
+for _, barSize in ipairs({ Vector2.new(14, 2), Vector2.new(2, 14) }) do
+create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = UDim2.fromOffset(barSize.X, barSize.Y),
+BackgroundColor3 = THEME.accent,
+BorderSizePixel = 0,
+Parent = cross,
+})
+end
+create("Frame", {
+Position = UDim2.fromOffset(46, 8),
+Size = UDim2.fromOffset(1, ISLAND_HEIGHT - 16),
+BackgroundColor3 = Color3.fromRGB(60, 60, 66),
+BorderSizePixel = 0,
+Parent = islandHolder,
+})
+local islandIcon = create("Frame", {
+Position = UDim2.fromOffset(56, 5),
+Size = UDim2.fromOffset(28, 28),
+BackgroundTransparency = 1,
+Parent = islandHolder,
+})
+local letterBadge = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = UDim2.fromOffset(22, 22),
+BackgroundColor3 = THEME.accent,
+BorderSizePixel = 0,
+Parent = islandIcon,
+})
+addCorner(letterBadge, 999)
+local islandLetter = createText(letterBadge, "T", 12, Color3.new(1, 1, 1), FONT_BOLD, Enum.TextXAlignment.Center)
+islandLetter.Size = UDim2.fromScale(1, 1)
+local islandLogo = create("ImageLabel", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = UDim2.fromOffset(42, 42),
+BackgroundTransparency = 1,
+ImageTransparency = 1,
+Parent = islandIcon,
+})
+local logoScale = create("UIScale", { Parent = islandLogo })
+self.islandLogo = islandLogo
+local statusDot = create("Frame", {
+AnchorPoint = Vector2.new(1, 1),
+Position = UDim2.new(1, 2, 1, 2),
+Size = UDim2.fromOffset(8, 8),
+BackgroundColor3 = Color3.fromRGB(52, 211, 120),
+BorderSizePixel = 0,
+ZIndex = 3,
+Parent = islandIcon,
+})
+addCorner(statusDot, 999)
+create("UIStroke", { Color = Color3.new(0, 0, 0), Thickness = 1.5, Parent = statusDot })
+task.spawn(function()
+local content = resolveLogo(options.Logo or "embedded")
+if not content then
+return
+end
+islandLogo.Image = content
+tween(islandLogo, 0.5, { ImageTransparency = 0 })
+tween(letterBadge, 0.4, { BackgroundTransparency = 1 })
+tween(islandLetter, 0.4, { TextTransparency = 1 })
+if self.expandedLogo then
+self.expandedLogo.Image = content
+tween(self.expandedLogo, 0.5, { ImageTransparency = 0 })
+tween(self.expandedBadge, 0.4, { BackgroundTransparency = 1 })
+tween(self.expandedLetter, 0.4, { TextTransparency = 1 })
+end
+end)
+local islandTitle = options.Title or "TANG HUB"
+local islandName = createText(islandHolder, islandTitle, 13, Color3.new(1, 1, 1), FONT_BOLD)
+islandName.Position = UDim2.fromOffset(90, 0)
+islandName.Size = UDim2.fromOffset(ISLAND_WIDTH - 98, ISLAND_HEIGHT)
+islandName.TextTruncate = Enum.TextTruncate.AtEnd
+local announceHolder = create("CanvasGroup", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = UDim2.fromOffset(ISLAND_ANNOUNCE_WIDTH, ISLAND_ANNOUNCE_HEIGHT),
+BackgroundTransparency = 1,
+GroupTransparency = 1,
+BorderSizePixel = 0,
+Parent = islandContent,
+})
+self.announceHolder = announceHolder
+self.announceTitle = createText(announceHolder, "", 13, Color3.new(1, 1, 1), FONT_BOLD)
+self.announceTitle.Position = UDim2.fromOffset(24, 9)
+self.announceTitle.Size = UDim2.fromOffset(ISLAND_ANNOUNCE_WIDTH - 48, 18)
+self.announceTitle.TextTruncate = Enum.TextTruncate.AtEnd
+self.announceText = createText(announceHolder, "", 12, Color3.fromRGB(170, 172, 182), FONT)
+self.announceText.Position = UDim2.fromOffset(24, 28)
+self.announceText.Size = UDim2.fromOffset(ISLAND_ANNOUNCE_WIDTH - 48, 18)
+self.announceText.TextTruncate = Enum.TextTruncate.AtEnd
+local expandedHolder = create("CanvasGroup", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = UDim2.fromOffset(ISLAND_EXPANDED_WIDTH, ISLAND_HEIGHT),
+BackgroundTransparency = 1,
+GroupTransparency = 1,
+BorderSizePixel = 0,
+Parent = islandContent,
+})
+self.expandedHolder = expandedHolder
+local expandedHandle = create("Frame", {
+Size = UDim2.fromOffset(52, ISLAND_HEIGHT),
+BackgroundTransparency = 1,
+Parent = expandedHolder,
+})
+local expandedBadge = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromOffset(28, 19),
+Size = UDim2.fromOffset(22, 22),
+BackgroundColor3 = THEME.accent,
+BorderSizePixel = 0,
+Parent = expandedHandle,
+})
+addCorner(expandedBadge, 999)
+local expandedLetter = createText(expandedBadge, "T", 12, Color3.new(1, 1, 1), FONT_BOLD, Enum.TextXAlignment.Center)
+expandedLetter.Size = UDim2.fromScale(1, 1)
+local expandedLogo = create("ImageLabel", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromOffset(28, 19),
+Size = UDim2.fromOffset(42, 42),
+BackgroundTransparency = 1,
+ImageTransparency = 1,
+Parent = expandedHandle,
+})
+self.expandedBadge = expandedBadge
+self.expandedLetter = expandedLetter
+self.expandedLogo = expandedLogo
+if islandLogo.Image ~= "" then
+expandedLogo.Image = islandLogo.Image
+expandedLogo.ImageTransparency = 0
+expandedBadge.BackgroundTransparency = 1
+expandedLetter.TextTransparency = 1
+end
+create("Frame", {
+Position = UDim2.fromOffset(54, 8),
+Size = UDim2.fromOffset(1, ISLAND_HEIGHT - 16),
+BackgroundColor3 = Color3.fromRGB(60, 60, 66),
+BorderSizePixel = 0,
+Parent = expandedHolder,
+})
+local function createStat(x, caption)
+local captionLabel = createText(expandedHolder, caption, 9, Color3.fromRGB(130, 132, 142), FONT_BOLD)
+captionLabel.Position = UDim2.fromOffset(x, 5)
+captionLabel.Size = UDim2.fromOffset(60, 12)
+local valueLabel = createText(expandedHolder, "--", 12, Color3.new(1, 1, 1), FONT_BOLD)
+valueLabel.Position = UDim2.fromOffset(x, 17)
+valueLabel.Size = UDim2.fromOffset(60, 16)
+return valueLabel
+end
+self.statFps = createStat(68, "FPS")
+self.statPing = createStat(134, "PING")
+self.statTime = createStat(200, "TIME")
+local openPill = create("Frame", {
+Position = UDim2.fromOffset(266, 7),
+Size = UDim2.fromOffset(64, 24),
+BackgroundColor3 = THEME.accent,
+BorderSizePixel = 0,
+Parent = expandedHolder,
+})
+addCorner(openPill, 999)
+local openLabel = createText(openPill, "Open", 12, Color3.new(1, 1, 1), FONT_BOLD, Enum.TextXAlignment.Center)
+openLabel.Size = UDim2.fromScale(1, 1)
+local expandedTap = create("TextButton", {
+Position = UDim2.fromOffset(52, 0),
+Size = UDim2.fromOffset(ISLAND_EXPANDED_WIDTH - 52, ISLAND_HEIGHT),
+BackgroundTransparency = 1,
+Text = "",
+ZIndex = 2,
+Parent = expandedHolder,
+})
+expandedTap.MouseButton1Down:Connect(function()
+tween(islandScale, 0.1, { Scale = 0.94 })
+ripple(islandContent, THEME.accent)
+end)
+expandedTap.MouseButton1Up:Connect(function()
+tween(islandScale, 0.35, { Scale = 1 }, Enum.EasingStyle.Back)
+end)
+expandedTap.MouseButton1Click:Connect(function()
+self:setVisible(true)
+end)
+local tapButton = create("TextButton", {
+Position = UDim2.fromOffset(46, 0),
+Size = UDim2.fromOffset(ISLAND_WIDTH - 46, ISLAND_HEIGHT),
+BackgroundTransparency = 1,
+Text = "",
+ZIndex = 2,
+Parent = islandHolder,
+})
+tapButton.MouseButton1Down:Connect(function()
+tween(islandScale, 0.1, { Scale = 0.92 })
+ripple(islandContent, THEME.accent)
+end)
+tapButton.MouseButton1Up:Connect(function()
+tween(islandScale, 0.35, { Scale = 1 }, Enum.EasingStyle.Back)
+end)
+tapButton.MouseLeave:Connect(function()
+tween(islandScale, 0.35, { Scale = 1 }, Enum.EasingStyle.Back)
+end)
+tapButton.MouseButton1Click:Connect(function()
+self:setVisible(true)
+end)
+local islandDragStart, islandStart
+for _, dragFrame in ipairs({ handle, expandedHandle }) do
+dragFrame.InputBegan:Connect(function(input)
+if isPointer(input) then
+islandDragStart = input.Position
+islandStart = island.Position
+tween(islandScale, 0.2, { Scale = 1.1 }, Enum.EasingStyle.Back)
+end
+end)
+end
+table.insert(self.connections, userInputService.InputChanged:Connect(function(input)
+if islandDragStart and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+local delta = input.Position - islandDragStart
+island.Position = UDim2.new(islandStart.X.Scale, islandStart.X.Offset + delta.X, islandStart.Y.Scale, islandStart.Y.Offset + delta.Y)
+end
+end))
+table.insert(self.connections, userInputService.InputEnded:Connect(function(input)
+if islandDragStart and isPointer(input) then
+islandDragStart = nil
+tween(islandScale, 0.35, { Scale = 1 }, Enum.EasingStyle.Back)
+end
+end))
+local hovering = false
+island.MouseEnter:Connect(function()
+hovering = true
+self:setIslandExpanded(true)
+end)
+island.MouseLeave:Connect(function()
+hovering = false
+task.delay(0.25, function()
+if not hovering and not islandDragStart then
+self:setIslandExpanded(false)
+end
+end)
+end)
+local fps, frames, lastTick, lastPing = 60, 0, os.clock(), 0
+table.insert(self.connections, runService.RenderStepped:Connect(function()
+local clock = os.clock()
+frames = frames + 1
+if clock - lastTick >= 0.5 then
+fps = math.floor(frames / (clock - lastTick) + 0.5)
+frames = 0
+lastTick = clock
+end
+local mainFrame = self.main
+local mainShown = mainFrame.Visible and mainFrame.GroupTransparency < 0.98
+for _, layer in ipairs(self.shadows) do
+layer.frame.Visible = mainShown
+if mainShown then
+local position = mainFrame.Position
+local windowScale = self.scale.Scale
+layer.frame.Position = UDim2.new(position.X.Scale, position.X.Offset, position.Y.Scale, position.Y.Offset + layer.offset * windowScale)
+layer.frame.Size = UDim2.fromOffset(mainFrame.Size.X.Offset + layer.grow, mainFrame.Size.Y.Offset + layer.grow)
+layer.frame.Rotation = mainFrame.Rotation
+layer.scale.Scale = windowScale
+local base = 1 - (1 - layer.alpha) * math.max(0, 1 - GLASS * 6)
+layer.frame.BackgroundTransparency = base + (1 - base) * mainFrame.GroupTransparency
+end
+end
+if not island.Visible then
+return
+end
+logoScale.Scale = 1 + math.sin(clock * 2) * 0.05
+if self.islandExpanded then
+self.statFps.Text = tostring(fps)
+if clock - lastPing > 1 then
+lastPing = clock
+self.statPing.Text = tostring(getPing()) .. " ms"
+end
+self.statTime.Text = os.date("%H:%M")
+end
+self.islandStroke.Thickness = 2 + math.sin(clock * 3) * 0.6
+self.islandGradient.Rotation = (clock * 140) % 360
+cross.Rotation = math.sin(clock * 1.6) * 18
+statusDot.BackgroundTransparency = 0.5 + math.sin(clock * 5) * 0.35
+end))
+task.spawn(function()
+local index = 1
+while self.gui.Parent do
+task.wait(3)
+if island.Visible and not self.visible and not self.islandExpanded then
+index = index % 3 + 1
+local text = islandTitle
+if index == 2 then
+text = "FPS  " .. tostring(fps)
+elseif index == 3 then
+text = "Ping  " .. tostring(getPing()) .. " ms"
+end
+tween(islandName, 0.2, { Position = UDim2.fromOffset(90, -14), TextTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+task.wait(0.2)
+islandName.Text = text
+islandName.Position = UDim2.fromOffset(90, 14)
+tween(islandName, 0.35, { Position = UDim2.fromOffset(90, 0), TextTransparency = 0 }, Enum.EasingStyle.Back)
+end
+end
+end)
+local camera = workspace.CurrentCamera
+if camera then
+table.insert(self.connections, camera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+if self.visible then
+tween(self.scale, 0.3, { Scale = self:getFitScale() })
+end
+end))
+end
+self:setTransparency(options.Transparency or 0.35)
+self:updateNavigation()
+self:setVisible(true, true)
+return self
+end
+function Window:getFitScale()
+local camera = workspace.CurrentCamera
+if not camera then
+return 1
+end
+local viewport = camera.ViewportSize
+local size = self.maximized and WINDOW_SIZE_LARGE or WINDOW_SIZE
+return math.clamp(math.min((viewport.X - 24) / size.X.Offset, (viewport.Y - 70) / size.Y.Offset), 0.5, 1)
+end
+function Window:updateIslandColors()
+self.islandGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, THEME.accent),
+ColorSequenceKeypoint.new(0.35, Color3.new(1, 1, 1)),
+ColorSequenceKeypoint.new(0.7, THEME.accentHover),
+ColorSequenceKeypoint.new(1, THEME.accent),
+})
+end
+function Window:setIslandVisible(state)
+local island = self.island
+local small = UDim2.fromOffset(46, 34)
+if not state then
+self.islandExpanded = false
+self.hoverToken = (self.hoverToken or 0) + 1
+end
+if state then
+local rest = island.Position
+island.Visible = true
+island.Size = small
+island.Position = UDim2.new(rest.X.Scale, rest.X.Offset, rest.Y.Scale, rest.Y.Offset - 26)
+island.BackgroundTransparency = 1
+self.islandStroke.Transparency = 1
+self.islandContent.GroupTransparency = 1
+self.islandHolder.GroupTransparency = 0
+self.announceHolder.GroupTransparency = 1
+self.islandExpanded = false
+self.hoverToken = (self.hoverToken or 0) + 1
+self.expandedHolder.GroupTransparency = 1
+tween(island, 0.7, {
+Position = rest,
+Size = UDim2.fromOffset(ISLAND_WIDTH, ISLAND_HEIGHT),
+BackgroundTransparency = 0,
+}, Enum.EasingStyle.Back)
+tween(self.islandStroke, 0.35, { Transparency = 0 })
+task.delay(0.15, function()
+tween(self.islandContent, 0.35, { GroupTransparency = 0 })
+end)
+return
+end
+tween(island, 0.3, { Size = small, BackgroundTransparency = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+tween(self.islandStroke, 0.25, { Transparency = 1 })
+tween(self.islandContent, 0.2, { GroupTransparency = 1 })
+task.delay(0.3, function()
+if self.visible then
+island.Visible = false
+end
+end)
+end
+function Window:setIslandExpanded(state)
+if state == self.islandExpanded then
+return
+end
+if state and (self.visible or self.announceActive or not self.island.Visible) then
+return
+end
+self.islandExpanded = state
+self.hoverToken = (self.hoverToken or 0) + 1
+local token = self.hoverToken
+local island = self.island
+if state then
+tween(self.islandHolder, 0.15, { GroupTransparency = 1 })
+tween(island, 0.16, { Size = UDim2.fromOffset(ISLAND_WIDTH + 24, ISLAND_HEIGHT - 6) }, Enum.EasingStyle.Quad)
+task.delay(0.16, function()
+if self.hoverToken ~= token then
+return
+end
+tween(island, 0.55, { Size = UDim2.fromOffset(ISLAND_EXPANDED_WIDTH, ISLAND_HEIGHT) }, Enum.EasingStyle.Back)
+tween(self.expandedHolder, 0.3, { GroupTransparency = 0 })
+end)
+return
+end
+tween(self.expandedHolder, 0.15, { GroupTransparency = 1 })
+tween(island, 0.5, { Size = UDim2.fromOffset(ISLAND_WIDTH, ISLAND_HEIGHT) }, Enum.EasingStyle.Back)
+task.delay(0.15, function()
+if self.hoverToken ~= token then
+return
+end
+tween(self.islandHolder, 0.3, { GroupTransparency = 0 })
+end)
+end
+function Window:announce(title, text, duration)
+if self.visible or not self.island.Visible then
+return
+end
+self.announceToken = (self.announceToken or 0) + 1
+local token = self.announceToken
+self.announceActive = true
+self.islandExpanded = false
+self.hoverToken = (self.hoverToken or 0) + 1
+self.expandedHolder.GroupTransparency = 1
+self.announceTitle.Text = title
+self.announceText.Text = text
+tween(self.islandHolder, 0.2, { GroupTransparency = 1 })
+tween(self.island, 0.55, { Size = UDim2.fromOffset(ISLAND_ANNOUNCE_WIDTH, ISLAND_ANNOUNCE_HEIGHT) }, Enum.EasingStyle.Back)
+task.delay(0.15, function()
+if self.announceToken ~= token then
+return
+end
+tween(self.announceHolder, 0.3, { GroupTransparency = 0 })
+end)
+task.delay(duration, function()
+if self.announceToken ~= token then
+return
+end
+tween(self.announceHolder, 0.2, { GroupTransparency = 1 })
+tween(self.island, 0.5, { Size = UDim2.fromOffset(ISLAND_WIDTH, ISLAND_HEIGHT) }, Enum.EasingStyle.Back)
+task.delay(0.2, function()
+if self.announceToken ~= token then
+return
+end
+self.announceActive = false
+tween(self.islandHolder, 0.3, { GroupTransparency = 0 })
+end)
+end)
+end
+function Window:buildGenie()
+if self.genieStrips then
+return
+end
+self.genieHolder = create("Frame", {
+Size = UDim2.fromScale(1, 1),
+BackgroundTransparency = 1,
+Visible = false,
+ZIndex = 40,
+Parent = self.gui,
+})
+self.genieStrips = {}
+for index = 1, GENIE_STRIPS do
+local frame = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+BorderSizePixel = 0,
+BackgroundColor3 = Color3.new(1, 1, 1),
+BackgroundTransparency = 1,
+Parent = self.genieHolder,
+})
+local gradient = create("UIGradient", { Parent = frame })
+self.genieStrips[index] = { frame = frame, gradient = gradient }
+end
+end
+function Window:paintGenie(size)
+local count = #self.genieStrips
+local sidebarFraction = self.sidebarOpen and SIDEBAR_WIDTH / size.X.Offset or 0
+local headerFraction = HEADER_HEIGHT / size.Y.Offset
+for index, strip in ipairs(self.genieStrips) do
+local t = (index - 0.5) / count
+local rightColor = t < headerFraction and THEME.header or THEME.background
+if sidebarFraction > 0.001 then
+strip.gradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, THEME.sidebar),
+ColorSequenceKeypoint.new(sidebarFraction, THEME.sidebar),
+ColorSequenceKeypoint.new(math.min(sidebarFraction + 0.001, 0.999), rightColor),
+ColorSequenceKeypoint.new(1, rightColor),
+})
+else
+strip.gradient.Color = ColorSequence.new(rightColor)
+end
+end
+end
+function Window:updateGenie(progress, opacity, geometry)
+local strips = self.genieStrips
+local count = #strips
+local ys, xs, ws = {}, {}, {}
+for index = 1, count do
+local t = (index - 0.5) / count
+local reach = math.clamp(progress * (1 + GENIE_LAG) - t * GENIE_LAG, 0, 1)
+local smooth = reach * reach * (3 - 2 * reach)
+local baseY = geometry.top + t * geometry.height
+ys[index] = baseY + (geometry.target.Y - baseY) * smooth
+xs[index] = geometry.center.X + (geometry.target.X - geometry.center.X) * smooth
+ws[index] = geometry.width + (geometry.islandWidth - geometry.width) * smooth
+end
+for index = 1, count do
+local nextIndex = math.min(index + 1, count)
+local previousIndex = math.max(index - 1, 1)
+local span = math.abs(ys[nextIndex] - ys[previousIndex]) / math.max(nextIndex - previousIndex, 1)
+local frame = strips[index].frame
+frame.Position = UDim2.fromOffset(xs[index], ys[index])
+frame.Size = UDim2.fromOffset(ws[index], math.max(span + 2, 2))
+frame.BackgroundTransparency = 1 - opacity * (1 - GLASS)
+end
+end
+function Window:playGenie(closing, token)
+self:buildGenie()
+local size = self.maximized and WINDOW_SIZE_LARGE or WINDOW_SIZE
+local fit = self:getFitScale()
+local center = toPixels(self.restPosition)
+local geometry = {
+center = center,
+width = size.X.Offset * fit,
+height = size.Y.Offset * fit,
+top = center.Y - size.Y.Offset * fit / 2,
+target = toPixels(self.island.Position),
+islandWidth = ISLAND_WIDTH,
+}
+self:paintGenie(size)
+if self.genieConnection then
+self.genieConnection:Disconnect()
+self.genieConnection = nil
+end
+self.genieHolder.Visible = true
+local startClock = os.clock()
+self.genieConnection = runService.RenderStepped:Connect(function()
+if self.visibleToken ~= token then
+self.genieConnection:Disconnect()
+self.genieConnection = nil
+self.genieHolder.Visible = false
+return
+end
+local alpha = math.clamp((os.clock() - startClock) / GENIE_DURATION, 0, 1)
+local eased = alpha < 0.5 and 4 * alpha ^ 3 or 1 - (-2 * alpha + 2) ^ 3 / 2
+local progress = closing and eased or 1 - eased
+local opacity
+if closing then
+opacity = math.clamp(alpha / 0.12, 0, 1)
+self.main.GroupTransparency = math.clamp(alpha / 0.2, 0, 1)
+else
+opacity = math.clamp((1 - alpha) / 0.15, 0, 1)
+self.main.GroupTransparency = 1 - math.clamp((alpha - 0.8) / 0.2, 0, 1)
+end
+self:updateGenie(progress, opacity, geometry)
+if alpha >= 1 then
+self.genieConnection:Disconnect()
+self.genieConnection = nil
+self.genieHolder.Visible = false
+if closing then
+self.main.Visible = false
+self:setIslandVisible(true)
+else
+self.main.GroupTransparency = 0
+end
+end
+end)
+end
+function Window:setVisible(state, launch)
+if state == self.visible and not launch then
+return
+end
+self.visible = state
+self.visibleToken = (self.visibleToken or 0) + 1
+self.announceToken = (self.announceToken or 0) + 1
+self.announceActive = false
+local token = self.visibleToken
+local fit = self:getFitScale()
+if state and launch then
+self.main.Visible = true
+self.main.Position = self.restPosition
+self.main.Rotation = 0
+self.scale.Scale = fit * 0.9
+self.main.GroupTransparency = 1
+tween(self.scale, 0.5, { Scale = fit }, Enum.EasingStyle.Quint)
+tween(self.main, 0.25, { GroupTransparency = 0 }, Enum.EasingStyle.Quad)
+return
+end
+if state then
+self:setIslandVisible(false)
+self.main.Visible = true
+self.main.Position = self.restPosition
+self.main.Rotation = 0
+self.scale.Scale = fit
+self.main.GroupTransparency = 1
+self:playGenie(false, token)
+return
+end
+self.restPosition = self.main.Position
+self:playGenie(true, token)
+end
+function Window:destroy()
+for _, layer in ipairs(self.shadows) do
+tween(layer.frame, 0.3, { BackgroundTransparency = 1 })
+end
+for _, connection in ipairs(self.connections) do
+connection:Disconnect()
+end
+self.visibleToken = (self.visibleToken or 0) + 1
+if self.genieConnection then
+self.genieConnection:Disconnect()
+self.genieConnection = nil
+end
+tween(self.scale, 0.2, { Scale = self.scale.Scale * 0.94 }, Enum.EasingStyle.Quad)
+tween(self.main, 0.2, { GroupTransparency = 1 }, Enum.EasingStyle.Quad)
+task.delay(0.22, function()
+self.gui:Destroy()
+end)
+end
+function Window:setSidebarOpen(state)
+self.sidebarOpen = state
+local width = state and SIDEBAR_WIDTH or 0
+tween(self.sidebar, 0.45, { Size = UDim2.new(0, width, 1, 0) })
+tween(self.body, 0.45, {
+Position = UDim2.fromOffset(width, 0),
+Size = UDim2.new(1, -width, 1, 0),
+})
+tween(self.headerLeft, 0.45, { Position = UDim2.fromOffset(state and 14 or 84, 0) })
+end
+function Window:updateNavigation()
+local canBack = self.historyIndex > 1
+local canForward = self.historyIndex < #self.history
+tween(self.backLabel, 0.2, {
+TextTransparency = canBack and 0 or 0.65,
+TextColor3 = canBack and THEME.text or THEME.subText,
+})
+tween(self.forwardLabel, 0.2, {
+TextTransparency = canForward and 0 or 0.65,
+TextColor3 = canForward and THEME.text or THEME.subText,
+})
+end
+function Window:navigate(direction)
+local target = self.historyIndex + direction
+if target < 1 or target > #self.history then
+return
+end
+self.historyIndex = target
+self:selectTab(self.history[target], true)
+end
+function Window:bindDrag(target, onMove, onBegin, onEnd)
+local dragging = false
+target.InputBegan:Connect(function(input)
+if isPointer(input) then
+dragging = true
+if onBegin then
+onBegin()
+end
+onMove(pointerPosition(input))
+end
+end)
+table.insert(self.connections, userInputService.InputChanged:Connect(function(input)
+if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+onMove(pointerPosition(input))
+end
+end))
+table.insert(self.connections, userInputService.InputEnded:Connect(function(input)
+if dragging and isPointer(input) then
+dragging = false
+if onEnd then
+onEnd()
+end
+end
+end))
+end
+function Window:notify(options)
+local duration = options.Duration or 4
+self:announce(options.Title or "Notification", options.Text or "", math.min(duration, 3.5))
+local holder = create("Frame", {
+Size = UDim2.new(1, 0, 0, 64),
+BackgroundTransparency = 1,
+Parent = self.notifyHolder,
+})
+local toast = create("CanvasGroup", {
+Position = UDim2.new(1, 40, 0, 0),
+Size = UDim2.fromScale(1, 1),
+BackgroundColor3 = THEME.header,
+GroupTransparency = 1,
+Parent = holder,
+})
+addCorner(toast, 12)
+local titleLabel = createText(toast, options.Title or "Notification", 13, THEME.text, FONT_BOLD)
+titleLabel.Position = UDim2.fromOffset(14, 8)
+titleLabel.Size = UDim2.new(1, -28, 0, 18)
+local textLabel = createText(toast, options.Text or "", 12, THEME.subText, FONT)
+textLabel.Position = UDim2.fromOffset(14, 27)
+textLabel.Size = UDim2.new(1, -28, 0, 28)
+textLabel.TextWrapped = true
+textLabel.TextYAlignment = Enum.TextYAlignment.Top
+local bar = create("Frame", {
+Position = UDim2.new(0, 0, 1, -3),
+Size = UDim2.new(1, 0, 0, 3),
+BackgroundColor3 = THEME.accent,
+BorderSizePixel = 0,
+Parent = toast,
+})
+tween(toast, 0.5, { Position = UDim2.new(0, 0, 0, 0), GroupTransparency = 0 }, Enum.EasingStyle.Back)
+tween(bar, duration, { Size = UDim2.new(0, 0, 0, 3) }, Enum.EasingStyle.Linear)
+task.delay(duration, function()
+tween(toast, 0.3, { Position = UDim2.new(1, 40, 0, 0), GroupTransparency = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+task.wait(0.3)
+tween(holder, 0.2, { Size = UDim2.new(1, 0, 0, 0) })
+task.wait(0.2)
+holder:Destroy()
+end)
+end
+function Window:addSection(name)
+if self.tabCursor > 0 then
+self.tabCursor = self.tabCursor + 10
+end
+local label = createText(self.tabHolder, string.upper(name), 11, THEME.subText, FONT_BOLD)
+label.Position = UDim2.fromOffset(8, self.tabCursor)
+label.Size = UDim2.new(1, -16, 0, 20)
+self.tabCursor = self.tabCursor + 24
+self.tabHolder.CanvasSize = UDim2.fromOffset(0, self.tabCursor)
+end
+local function setTabActive(tab, active)
+tab.active = active
+local color = active and Color3.new(1, 1, 1) or THEME.text
+tween(tab.label, 0.25, { TextColor3 = color })
+if tab.icon then
+tween(tab.icon, 0.25, { ImageColor3 = color })
+end
+if active then
+tween(tab.button, 0.2, { BackgroundTransparency = 1 })
+end
+end
+function Window:addTab(options)
+if typeof(options) == "string" then
+options = { Name = options }
+end
+local tab = setmetatable({}, Tab)
+tab.window = self
+tab.index = #self.tabs + 1
+tab.y = self.tabCursor
+tab.items = {}
+tab.groups = {}
+tab.active = false
+self.tabCursor = self.tabCursor + TAB_HEIGHT + TAB_PADDING
+self.tabHolder.CanvasSize = UDim2.fromOffset(0, self.tabCursor)
+tab.button = create("CanvasGroup", {
+Position = UDim2.fromOffset(0, tab.y),
+Size = UDim2.new(1, 0, 0, TAB_HEIGHT),
+BackgroundColor3 = THEME.tabHover,
+BackgroundTransparency = 1,
+BorderSizePixel = 0,
+ZIndex = 2,
+Parent = self.tabHolder,
+})
+addCorner(tab.button, 8)
+local textX = 14
+if options.Icon then
+tab.icon = create("ImageLabel", {
+Position = UDim2.new(0, 10, 0.5, 0),
+AnchorPoint = Vector2.new(0, 0.5),
+Size = UDim2.fromOffset(18, 18),
+BackgroundTransparency = 1,
+Image = options.Icon,
+ImageColor3 = THEME.text,
+Parent = tab.button,
+})
+textX = 36
+end
+tab.name = options.Name or "Tab"
+tab.label = createText(tab.button, tab.name, 13, THEME.text, FONT_MEDIUM)
+tab.label.Position = UDim2.fromOffset(textX, 0)
+tab.label.Size = UDim2.new(1, -textX - 8, 1, 0)
+local overlay = create("TextButton", {
+Size = UDim2.fromScale(1, 1),
+BackgroundTransparency = 1,
+Text = "",
+ZIndex = 5,
+Parent = tab.button,
+})
+overlay.MouseEnter:Connect(function()
+if not tab.active then
+tween(tab.button, 0.15, { BackgroundTransparency = 0.2 })
+end
+end)
+overlay.MouseLeave:Connect(function()
+if not tab.active then
+tween(tab.button, 0.15, { BackgroundTransparency = 1 })
+end
+end)
+overlay.MouseButton1Down:Connect(function()
+ripple(tab.button, tab.active and Color3.new(1, 1, 1) or THEME.accent)
+end)
+overlay.MouseButton1Click:Connect(function()
+self:selectTab(tab)
+end)
+tab.page = create("ScrollingFrame", {
+Size = UDim2.fromScale(1, 1),
+BackgroundTransparency = 1,
+BorderSizePixel = 0,
+ScrollBarThickness = 3,
+ScrollBarImageColor3 = THEME.track,
+CanvasSize = UDim2.new(),
+AutomaticCanvasSize = Enum.AutomaticSize.Y,
+Visible = false,
+Parent = self.content,
+})
+create("UIListLayout", {
+Padding = UDim.new(0, 10),
+SortOrder = Enum.SortOrder.LayoutOrder,
+Parent = tab.page,
+})
+create("UIPadding", {
+PaddingLeft = UDim.new(0, 16),
+PaddingRight = UDim.new(0, 18),
+PaddingTop = UDim.new(0, 14),
+PaddingBottom = UDim.new(0, 16),
+Parent = tab.page,
+})
+table.insert(self.tabs, tab)
+return tab
+end
+function Window:selectTab(tab, fromHistory)
+if self.currentTab == tab then
+return
+end
+if not fromHistory then
+for index = #self.history, self.historyIndex + 1, -1 do
+table.remove(self.history, index)
+end
+table.insert(self.history, tab)
+self.historyIndex = #self.history
+end
+self.token = self.token + 1
+local token = self.token
+local previous = self.currentTab
+self.searchBox.Text = ""
+self.currentTab = tab
+self:updateNavigation()
+for _, other in ipairs(self.tabs) do
+setTabActive(other, other == tab)
+end
+local targetY = tab.y
+if not previous then
+self.indicator.Position = UDim2.fromOffset(0, targetY)
+self.indicator.Visible = true
+else
+local fromY = self.indicatorY
+local top = math.min(fromY, targetY)
+local height = math.abs(targetY - fromY) + TAB_HEIGHT
+tween(self.indicator, 0.14, {
+Position = UDim2.fromOffset(0, top),
+Size = UDim2.new(1, 0, 0, height),
+}, Enum.EasingStyle.Quad)
+task.delay(0.14, function()
+if self.token ~= token then
+return
+end
+tween(self.indicator, 0.35, {
+Position = UDim2.fromOffset(0, targetY),
+Size = UDim2.new(1, 0, 0, TAB_HEIGHT),
+}, Enum.EasingStyle.Back)
+end)
+end
+self.indicatorY = targetY
+if previous then
+for _, item in ipairs(previous.items) do
+tween(item.inner, 0.12, {
+GroupTransparency = 1,
+Position = UDim2.new(0.5, -20, 0.5, 0),
+}, Enum.EasingStyle.Quad)
+end
+task.delay(0.13, function()
+if self.currentTab ~= previous then
+previous.page.Visible = false
+end
+end)
+end
+tab.page.Visible = true
+tab.page.CanvasPosition = Vector2.zero
+for index, item in ipairs(tab.items) do
+item.inner.GroupTransparency = 1
+item.inner.Position = START_POSITION
+task.delay(0.08 + math.min(index - 1, 10) * 0.055, function()
+if self.currentTab ~= tab or self.token ~= token then
+return
+end
+tween(item.inner, 0.45, {
+GroupTransparency = 0,
+Position = REST_POSITION,
+}, Enum.EasingStyle.Back)
+end)
+end
+end
+function Tab:filter(query)
+query = string.lower(query or "")
+for _, group in ipairs(self.groups) do
+local anyVisible = false
+for _, row in ipairs(group.rows) do
+local match = query == "" or string.find(row.name, query, 1, true) ~= nil
+row.holder.Visible = match
+anyVisible = anyVisible or match
+end
+group.card.holder.Visible = anyVisible
+if group.section then
+group.section.holder.Visible = anyVisible
+end
+end
+end
+function Tab:createItem(height, background)
+local holder = create("Frame", {
+Size = UDim2.new(1, 0, 0, height),
+BackgroundTransparency = 1,
+LayoutOrder = #self.items + 1,
+Parent = self.page,
+})
+local inner = create("CanvasGroup", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = REST_POSITION,
+Size = UDim2.fromScale(1, 1),
+BackgroundColor3 = THEME.element,
+BackgroundTransparency = background and GLASS or 1,
+BorderSizePixel = 0,
+Parent = holder,
+})
+if background then
+addCorner(inner, 12)
+end
+local item = { holder = holder, inner = inner }
+table.insert(self.items, item)
+return item
+end
+function Tab:addGroup(options)
+if typeof(options) == "string" then
+options = { Title = options }
+end
+options = options or {}
+local group = { rows = {} }
+if options.Title then
+local hasDescription = options.Description ~= nil and options.Description ~= ""
+local section = self:createItem(hasDescription and 42 or 24, false)
+local title = createText(section.inner, options.Title, 14, THEME.text, FONT_BOLD)
+title.Position = UDim2.fromOffset(2, 0)
+title.Size = UDim2.new(1, -4, 0, 20)
+if hasDescription then
+local description = createText(section.inner, options.Description, 11, THEME.subText, FONT)
+description.Position = UDim2.fromOffset(2, 21)
+description.Size = UDim2.new(1, -4, 0, 16)
+end
+group.section = section
+end
+local card = self:createItem(0, true)
+local layout = create("UIListLayout", {
+SortOrder = Enum.SortOrder.LayoutOrder,
+Parent = card.inner,
+})
+layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+card.holder.Size = UDim2.new(1, 0, 0, layout.AbsoluteContentSize.Y)
+end)
+group.card = card
+table.insert(self.groups, group)
+self.group = group
+return self
+end
+function Tab:addSection(name)
+return self:addGroup({ Title = name })
+end
+function Tab:getGroup()
+if not self.group then
+self:addGroup({})
+end
+return self.group
+end
+function Tab:createRow(options)
+local group = self:getGroup()
+local description = options.Description
+local descHeight = 0
+if description and description ~= "" then
+descHeight = textService:GetTextSize(description, 11, FONT, Vector2.new(TEXT_WIDTH, 10000)).Y
+end
+local height = options.Height or 46
+if descHeight > 0 then
+height = math.max(height, 36 + descHeight)
+end
+local holder = create("Frame", {
+Size = UDim2.new(1, 0, 0, height),
+BackgroundTransparency = 1,
+LayoutOrder = #group.rows + 1,
+Parent = group.card.inner,
+})
+local inner = create("Frame", {
+Size = UDim2.fromScale(1, 1),
+BackgroundColor3 = THEME.elementHover,
+BackgroundTransparency = 1,
+BorderSizePixel = 0,
+Parent = holder,
+})
+if #group.rows > 0 then
+create("Frame", {
+Position = UDim2.fromOffset(14, 0),
+Size = UDim2.new(1, -28, 0, 1),
+BackgroundColor3 = THEME.divider,
+BorderSizePixel = 0,
+ZIndex = 2,
+Parent = inner,
+})
+end
+local row = {
+holder = holder,
+inner = inner,
+height = height,
+name = string.lower((options.Name or "") .. " " .. (description or "")),
+}
+if not options.HideText then
+row.title = createText(inner, options.Name or "", 13, THEME.text, FONT_MEDIUM)
+row.title.Position = UDim2.fromOffset(14, descHeight > 0 and 11 or 0)
+row.title.Size = UDim2.fromOffset(TEXT_WIDTH, descHeight > 0 and 18 or height)
+if descHeight > 0 then
+local label = createText(inner, description, 11, THEME.subText, FONT)
+label.Position = UDim2.fromOffset(14, 30)
+label.Size = UDim2.fromOffset(TEXT_WIDTH, descHeight + 2)
+label.TextWrapped = true
+label.TextYAlignment = Enum.TextYAlignment.Top
+end
+end
+inner.MouseEnter:Connect(function()
+tween(inner, 0.15, { BackgroundTransparency = GLASS > 0 and 0.25 + GLASS * 0.5 or 0 })
+end)
+inner.MouseLeave:Connect(function()
+tween(inner, 0.15, { BackgroundTransparency = 1 })
+end)
+function row.centerY(controlHeight)
+return math.floor((height - controlHeight) / 2)
+end
+table.insert(group.rows, row)
+return row
+end
+function Tab:addLabel(text)
+local row = self:createRow({ Name = text, Height = 36 })
+row.title.TextColor3 = THEME.subText
+row.title.TextSize = 12
+row.title.Font = FONT
+return {
+Set = function(value)
+row.title.Text = value
+end,
+}
+end
+function Tab:addParagraph(options)
+self:createRow({ Name = options.Title, Description = options.Text })
+end
+function Tab:addButton(options)
+local destructive = options.Style == "Destructive"
+local callback = options.Callback or function() end
+local row = self:createRow({ Name = options.Name, Description = options.Description, Height = 52, HideText = options.Description == nil })
+local hasText = options.Description ~= nil
+local function baseColor()
+return destructive and THEME.field or THEME.accent
+end
+local function hoverColor()
+return destructive and THEME.destructiveHover or THEME.accentHover
+end
+local pill = create("CanvasGroup", {
+AnchorPoint = Vector2.new(hasText and 1 or 0.5, 0),
+Position = hasText and UDim2.new(1, -14, 0, row.centerY(30)) or UDim2.new(0.5, 0, 0, row.centerY(30)),
+Size = hasText and UDim2.fromOffset(110, 30) or UDim2.new(1, -28, 0, 30),
+BackgroundColor3 = baseColor(),
+BorderSizePixel = 0,
+Parent = row.inner,
+})
+addCorner(pill, 999)
+local pressScale = create("UIScale", { Parent = pill })
+local button = create("TextButton", {
+Size = UDim2.fromScale(1, 1),
+BackgroundTransparency = 1,
+Text = options.Name,
+TextSize = 13,
+Font = FONT_MEDIUM,
+TextColor3 = destructive and THEME.destructive or Color3.new(1, 1, 1),
+AutoButtonColor = false,
+Parent = pill,
+})
+button.MouseEnter:Connect(function()
+tween(pill, 0.15, { BackgroundColor3 = hoverColor() })
+end)
+button.MouseLeave:Connect(function()
+tween(pill, 0.15, { BackgroundColor3 = baseColor() })
+tween(pressScale, 0.3, { Scale = 1 }, Enum.EasingStyle.Back)
+end)
+button.MouseButton1Down:Connect(function()
+tween(pressScale, 0.1, { Scale = 0.95 })
+ripple(pill, destructive and THEME.destructive or Color3.new(1, 1, 1))
+end)
+button.MouseButton1Up:Connect(function()
+tween(pressScale, 0.35, { Scale = 1 }, Enum.EasingStyle.Back)
+end)
+button.MouseButton1Click:Connect(callback)
+end
+function Tab:addToggle(options)
+local state = options.Default == true
+local callback = options.Callback or function() end
+local row = self:createRow(options)
+local hit = create("TextButton", {
+Size = UDim2.fromScale(1, 1),
+BackgroundTransparency = 1,
+Text = "",
+Parent = row.inner,
+})
+local track = create("Frame", {
+AnchorPoint = Vector2.new(1, 0),
+Position = UDim2.new(1, -14, 0, row.centerY(24)),
+Size = UDim2.fromOffset(44, 24),
+BackgroundColor3 = THEME.track,
+BorderSizePixel = 0,
+Parent = row.inner,
+})
+addCorner(track, 999)
+local knob = create("Frame", {
+AnchorPoint = Vector2.new(0, 0.5),
+Position = UDim2.new(0, 3, 0.5, 0),
+Size = UDim2.fromOffset(18, 18),
+BackgroundColor3 = Color3.new(1, 1, 1),
+BorderSizePixel = 0,
+Parent = track,
+})
+addCorner(knob, 999)
+local function render()
+tween(track, 0.25, { BackgroundColor3 = state and THEME.accent or THEME.track })
+tween(knob, 0.35, { Position = UDim2.new(0, state and 23 or 3, 0.5, 0) }, Enum.EasingStyle.Back)
+end
+render()
+hit.MouseButton1Click:Connect(function()
+state = not state
+render()
+callback(state)
+end)
+return {
+Get = function()
+return state
+end,
+Set = function(value)
+state = value
+render()
+end,
+}
+end
+function Tab:addTextbox(options)
+local callback = options.Callback or function() end
+local row = self:createRow(options)
+local field = create("Frame", {
+AnchorPoint = Vector2.new(1, 0),
+Position = UDim2.new(1, -14, 0, row.centerY(28)),
+Size = UDim2.fromOffset(170, 28),
+BackgroundColor3 = THEME.field,
+BorderSizePixel = 0,
+Parent = row.inner,
+})
+addCorner(field, 8)
+local stroke = create("UIStroke", {
+Color = THEME.accent,
+Thickness = 1.5,
+Transparency = 1,
+Parent = field,
+})
+local box = create("TextBox", {
+Position = UDim2.fromOffset(10, 0),
+Size = UDim2.new(1, -20, 1, 0),
+BackgroundTransparency = 1,
+Text = options.Default or "",
+PlaceholderText = options.Placeholder or "Placeholder...",
+PlaceholderColor3 = THEME.subText,
+TextColor3 = THEME.text,
+TextSize = 12,
+Font = FONT,
+TextXAlignment = Enum.TextXAlignment.Left,
+ClearTextOnFocus = false,
+Parent = field,
+})
+box.Focused:Connect(function()
+tween(stroke, 0.2, { Transparency = 0 })
+end)
+box.FocusLost:Connect(function()
+tween(stroke, 0.2, { Transparency = 1 })
+callback(box.Text)
+end)
+return {
+Get = function()
+return box.Text
+end,
+Set = function(value)
+box.Text = value
+end,
+}
+end
+function Tab:addSlider(options)
+local minimum = options.Min or 0
+local maximum = options.Max or 100
+local increment = options.Increment or 1
+local callback = options.Callback or function() end
+local value = options.Default or minimum
+local row = self:createRow(options)
+local valueLabel = createText(row.inner, "", 13, THEME.accent, FONT_BOLD, Enum.TextXAlignment.Right)
+valueLabel.AnchorPoint = Vector2.new(1, 0)
+valueLabel.Position = UDim2.new(1, -14, 0, row.centerY(20))
+valueLabel.Size = UDim2.fromOffset(38, 20)
+local track = create("Frame", {
+AnchorPoint = Vector2.new(1, 0),
+Position = UDim2.new(1, -62, 0, row.centerY(6)),
+Size = UDim2.fromOffset(150, 6),
+BackgroundColor3 = THEME.track,
+BorderSizePixel = 0,
+Parent = row.inner,
+})
+addCorner(track, 999)
+local fill = create("Frame", {
+Size = UDim2.fromScale(0, 1),
+BackgroundColor3 = THEME.accent,
+BorderSizePixel = 0,
+Parent = track,
+})
+addCorner(fill, 999)
+local knob = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(1, 0.5),
+Size = UDim2.fromOffset(14, 14),
+BackgroundColor3 = Color3.new(1, 1, 1),
+BorderSizePixel = 0,
+Parent = fill,
+})
+addCorner(knob, 999)
+create("UIStroke", { Color = THEME.accent, Thickness = 2, Parent = knob })
+local hit = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.fromScale(0.5, 0.5),
+Size = UDim2.new(1, 0, 0, 24),
+BackgroundTransparency = 1,
+Parent = track,
+})
+local function setValue(newValue, silent)
+newValue = math.clamp(math.floor((newValue - minimum) / increment + 0.5) * increment + minimum, minimum, maximum)
+local changed = newValue ~= value
+value = newValue
+valueLabel.Text = string.format("%g", value)
+tween(fill, 0.08, { Size = UDim2.fromScale((value - minimum) / (maximum - minimum), 1) }, Enum.EasingStyle.Quad)
+if changed and not silent then
+callback(value)
+end
+end
+setValue(value, true)
+self.window:bindDrag(hit, function(mouse)
+local alpha = math.clamp((mouse.X - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
+setValue(minimum + alpha * (maximum - minimum))
+end, function()
+tween(knob, 0.2, { Size = UDim2.fromOffset(19, 19) }, Enum.EasingStyle.Back)
+end, function()
+tween(knob, 0.2, { Size = UDim2.fromOffset(14, 14) })
+end)
+return {
+Get = function()
+return value
+end,
+Set = function(newValue)
+setValue(newValue, true)
+end,
+}
+end
+function Tab:buildDropdown(options, multi)
+local choices = options.Options or {}
+local callback = options.Callback or function() end
+local rowHeight = 30
+local isOpen = false
+local selected = {}
+local rows = {}
+if multi then
+for _, name in ipairs(options.Default or {}) do
+selected[name] = true
+end
+elseif options.Default then
+selected[options.Default] = true
+end
+local row = self:createRow(options)
+local collapsedHeight = row.height
+local expandedHeight = collapsedHeight + #choices * rowHeight + 10
+local header = create("TextButton", {
+AnchorPoint = Vector2.new(1, 0),
+Position = UDim2.new(1, -14, 0, row.centerY(28)),
+Size = UDim2.fromOffset(150, 28),
+BackgroundColor3 = THEME.field,
+Text = "",
+AutoButtonColor = false,
+Parent = row.inner,
+})
+addCorner(header, 8)
+local selectedLabel = createText(header, "", 12, THEME.text, FONT, Enum.TextXAlignment.Right)
+selectedLabel.Position = UDim2.fromOffset(10, 0)
+selectedLabel.Size = UDim2.new(1, -32, 1, 0)
+selectedLabel.TextTruncate = Enum.TextTruncate.AtEnd
+local arrow = createText(header, "v", 11, THEME.subText, FONT_BOLD, Enum.TextXAlignment.Center)
+arrow.AnchorPoint = Vector2.new(1, 0.5)
+arrow.Position = UDim2.new(1, -6, 0.5, 0)
+arrow.Size = UDim2.fromOffset(18, 18)
+local list = create("Frame", {
+Position = UDim2.new(0, 14, 0, collapsedHeight),
+Size = UDim2.new(1, -28, 0, #choices * rowHeight),
+BackgroundTransparency = 1,
+Parent = row.inner,
+})
+create("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Parent = list })
+local function names()
+local result = {}
+for _, choice in ipairs(choices) do
+if selected[choice] then
+table.insert(result, choice)
+end
+end
+return result
+end
+local function refresh()
+local current = names()
+selectedLabel.Text = #current > 0 and table.concat(current, ", ") or "None"
+for _, choice in ipairs(choices) do
+local on = selected[choice] == true
+local entry = rows[choice]
+tween(entry.button, 0.2, { TextColor3 = on and THEME.accent or THEME.text })
+if entry.box then
+tween(entry.box, 0.2, { BackgroundColor3 = on and THEME.accent or THEME.track })
+end
+end
+end
+local function setOpen(state)
+isOpen = state
+tween(row.holder, 0.4, { Size = UDim2.new(1, 0, 0, state and expandedHeight or collapsedHeight) })
+tween(arrow, 0.3, { Rotation = state and 180 or 0 })
+if not state then
+return
+end
+for index, choice in ipairs(choices) do
+local button = rows[choice].button
+button.TextTransparency = 1
+task.delay((index - 1) * 0.035, function()
+tween(button, 0.25, { TextTransparency = 0 })
+end)
+end
+end
+for index, choice in ipairs(choices) do
+local button = create("TextButton", {
+LayoutOrder = index,
+Size = UDim2.new(1, 0, 0, rowHeight - 4),
+BackgroundTransparency = 1,
+Text = choice,
+TextSize = 12,
+Font = FONT,
+TextColor3 = THEME.text,
+TextXAlignment = Enum.TextXAlignment.Left,
+AutoButtonColor = false,
+Parent = list,
+})
+create("UIPadding", { PaddingLeft = UDim.new(0, 10), Parent = button })
+rows[choice] = { button = button }
+if multi then
+local box = create("Frame", {
+AnchorPoint = Vector2.new(1, 0.5),
+Position = UDim2.new(1, -10, 0.5, 0),
+Size = UDim2.fromOffset(14, 14),
+BackgroundColor3 = THEME.track,
+BorderSizePixel = 0,
+Parent = button,
+})
+addCorner(box, 4)
+rows[choice].box = box
+end
+button.MouseEnter:Connect(function()
+tween(button, 0.15, { BackgroundTransparency = 0.5, BackgroundColor3 = THEME.field })
+end)
+button.MouseLeave:Connect(function()
+tween(button, 0.15, { BackgroundTransparency = 1 })
+end)
+button.MouseButton1Click:Connect(function()
+if multi then
+selected[choice] = (not selected[choice]) or nil
+else
+selected = { [choice] = true }
+setOpen(false)
+end
+refresh()
+local current = names()
+callback(multi and current or current[1])
+end)
+end
+header.MouseButton1Click:Connect(function()
+setOpen(not isOpen)
+end)
+refresh()
+return {
+Get = function()
+local current = names()
+return multi and current or current[1]
+end,
+Set = function(value)
+selected = {}
+if multi then
+for _, name in ipairs(value) do
+selected[name] = true
+end
+else
+selected[value] = true
+end
+refresh()
+end,
+}
+end
+function Tab:addDropdown(options)
+return self:buildDropdown(options, false)
+end
+function Tab:addMultiDropdown(options)
+return self:buildDropdown(options, true)
+end
+function Tab:addColorpicker(options)
+local callback = options.Callback or function() end
+local hue, sat, val = (options.Default or Color3.fromRGB(255, 69, 58)):ToHSV()
+local isOpen = false
+local row = self:createRow(options)
+local collapsedHeight = row.height
+local expandedHeight = collapsedHeight + 126
+local swatch = create("TextButton", {
+AnchorPoint = Vector2.new(1, 0),
+Position = UDim2.new(1, -14, 0, row.centerY(26)),
+Size = UDim2.fromOffset(56, 26),
+BackgroundColor3 = Color3.fromHSV(hue, sat, val),
+Text = "",
+AutoButtonColor = false,
+Parent = row.inner,
+})
+addCorner(swatch, 8)
+local panel = create("Frame", {
+Position = UDim2.fromOffset(14, collapsedHeight + 2),
+Size = UDim2.new(1, -28, 0, 110),
+BackgroundTransparency = 1,
+Parent = row.inner,
+})
+local svBox = create("Frame", {
+Size = UDim2.new(1, -34, 1, 0),
+BackgroundColor3 = Color3.fromHSV(hue, 1, 1),
+BorderSizePixel = 0,
+Parent = panel,
+})
+addCorner(svBox, 6)
+local white = create("Frame", {
+Size = UDim2.fromScale(1, 1),
+BackgroundColor3 = Color3.new(1, 1, 1),
+BorderSizePixel = 0,
+Parent = svBox,
+})
+addCorner(white, 6)
+create("UIGradient", { Transparency = NumberSequence.new(0, 1), Parent = white })
+local black = create("Frame", {
+Size = UDim2.fromScale(1, 1),
+BackgroundColor3 = Color3.new(0, 0, 0),
+BorderSizePixel = 0,
+Parent = svBox,
+})
+addCorner(black, 6)
+create("UIGradient", { Rotation = 90, Transparency = NumberSequence.new(1, 0), Parent = black })
+local svCursor = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Size = UDim2.fromOffset(12, 12),
+BackgroundTransparency = 1,
+ZIndex = 3,
+Parent = svBox,
+})
+addCorner(svCursor, 999)
+create("UIStroke", { Color = Color3.new(1, 1, 1), Thickness = 2, Parent = svCursor })
+local hueBar = create("Frame", {
+AnchorPoint = Vector2.new(1, 0),
+Position = UDim2.fromScale(1, 0),
+Size = UDim2.new(0, 24, 1, 0),
+BackgroundColor3 = Color3.new(1, 1, 1),
+BorderSizePixel = 0,
+Parent = panel,
+})
+addCorner(hueBar, 6)
+local keypoints = {}
+for step = 0, 6 do
+table.insert(keypoints, ColorSequenceKeypoint.new(step / 6, Color3.fromHSV(step / 6, 1, 1)))
+end
+create("UIGradient", { Rotation = 90, Color = ColorSequence.new(keypoints), Parent = hueBar })
+local hueCursor = create("Frame", {
+AnchorPoint = Vector2.new(0.5, 0.5),
+Size = UDim2.new(1, 4, 0, 4),
+BackgroundColor3 = Color3.new(1, 1, 1),
+BorderSizePixel = 0,
+ZIndex = 3,
+Parent = hueBar,
+})
+addCorner(hueCursor, 2)
+create("UIStroke", { Color = Color3.fromRGB(60, 60, 60), Thickness = 1, Parent = hueCursor })
+local function refresh(silent)
+local color = Color3.fromHSV(hue, sat, val)
+swatch.BackgroundColor3 = color
+svBox.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
+svCursor.Position = UDim2.fromScale(sat, 1 - val)
+hueCursor.Position = UDim2.fromScale(0.5, hue)
+if not silent then
+callback(color)
+end
+end
+refresh(true)
+self.window:bindDrag(svBox, function(mouse)
+sat = math.clamp((mouse.X - svBox.AbsolutePosition.X) / svBox.AbsoluteSize.X, 0, 1)
+val = 1 - math.clamp((mouse.Y - svBox.AbsolutePosition.Y) / svBox.AbsoluteSize.Y, 0, 1)
+refresh()
+end)
+self.window:bindDrag(hueBar, function(mouse)
+hue = math.clamp((mouse.Y - hueBar.AbsolutePosition.Y) / hueBar.AbsoluteSize.Y, 0, 1)
+refresh()
+end)
+swatch.MouseButton1Click:Connect(function()
+isOpen = not isOpen
+tween(row.holder, 0.4, { Size = UDim2.new(1, 0, 0, isOpen and expandedHeight or collapsedHeight) })
+end)
+return {
+Get = function()
+return Color3.fromHSV(hue, sat, val)
+end,
+Set = function(color)
+hue, sat, val = color:ToHSV()
+refresh(true)
+end,
+}
+end
+function Tab:addKeybind(options)
+local callback = options.Callback or function() end
+local changed = options.Changed or function() end
+local key = options.Default
+local listening = false
+local row = self:createRow(options)
+local button = create("TextButton", {
+AnchorPoint = Vector2.new(1, 0),
+Position = UDim2.new(1, -14, 0, row.centerY(26)),
+Size = UDim2.fromOffset(70, 26),
+BackgroundColor3 = THEME.field,
+Text = key and key.Name or "None",
+TextSize = 12,
+Font = FONT_MEDIUM,
+TextColor3 = THEME.text,
+AutoButtonColor = false,
+Parent = row.inner,
+})
+addCorner(button, 8)
+button.MouseButton1Click:Connect(function()
+listening = true
+self.window.capturing = true
+button.Text = "..."
+tween(button, 0.2, { BackgroundColor3 = THEME.track })
+end)
+table.insert(self.window.connections, userInputService.InputBegan:Connect(function(input, processed)
+if input.UserInputType ~= Enum.UserInputType.Keyboard then
+return
+end
+if listening then
+listening = false
+task.delay(0.15, function()
+self.window.capturing = false
+end)
+if input.KeyCode ~= Enum.KeyCode.Escape then
+key = input.KeyCode
+changed(key)
+end
+button.Text = key and key.Name or "None"
+button.Size = UDim2.fromOffset(84, 30)
+tween(button, 0.4, { Size = UDim2.fromOffset(70, 26), BackgroundColor3 = THEME.field }, Enum.EasingStyle.Back)
+return
+end
+if not processed and key and input.KeyCode == key then
+callback(key)
+end
+end))
+return {
+Get = function()
+return key
+end,
+}
+end
+local function applyTheme(window, name)
+local theme = THEMES[name]
+if not theme then
+return
+end
+local lookup = {}
+for key, color in pairs(THEME) do
+lookup[color:ToHex()] = key
+end
+for _, object in ipairs(window.gui:GetDescendants()) do
+for _, property in ipairs(THEME_PROPERTIES) do
+local success, current = pcall(function()
+return object[property]
+end)
+if success and typeof(current) == "Color3" then
+local key = lookup[current:ToHex()]
+if key then
+tween(object, 0.35, { [property] = theme[key] }, Enum.EasingStyle.Quad)
+end
+end
+end
+end
+for key, color in pairs(theme) do
+THEME[key] = color
+end
+end
+function Window:setTransparency(value)
+value = math.clamp(value or 0, 0, 0.9)
+GLASS = value
+self.transparency = value
+local panels = {}
+for _, key in ipairs({ "background", "sidebar", "header", "element" }) do
+panels[THEME[key]:ToHex()] = value
+end
+panels[THEME.field:ToHex()] = value * 0.5
+local function apply(object)
+if object.BackgroundTransparency >= 1 then
+return
+end
+local target = panels[object.BackgroundColor3:ToHex()]
+if target then
+object.BackgroundTransparency = target
+end
+end
+apply(self.main)
+for _, object in ipairs(self.main:GetDescendants()) do
+if object:IsA("GuiObject") then
+apply(object)
+end
+end
+end
+function Window:setTheme(name)
+applyTheme(self, name)
+self.themeName = name
+self:updateIslandColors()
+self:updateNavigation()
+end
+function Window:addSettings()
+self:addSection("Preferences")
+local tab = self:addTab({ Name = "Settings" })
+tab:addGroup({ Title = "Theme", Description = "Change how the menu looks" })
+tab:addDropdown({
+Name = "Theme",
+Description = "Pick a color theme for the whole UI",
+Options = THEME_NAMES,
+Default = self.themeName,
+Callback = function(name)
+self:setTheme(name)
+end,
+})
+tab:addSlider({
+Name = "Transparency",
+Description = "Make the window see-through (text stays visible)",
+Min = 0,
+Max = 90,
+Default = math.floor(self.transparency * 100 + 0.5),
+Increment = 5,
+Callback = function(value)
+self:setTransparency(value / 100)
+end,
+})
+tab:addGroup({ Title = "Interface", Description = "Menu controls" })
+tab:addKeybind({
+Name = "Toggle UI",
+Description = "Key used to show or hide the menu",
+Default = self.toggleKey,
+Changed = function(key)
+self.toggleKey = key
+end,
+})
+return tab
+end
+function Window:addCredits(name)
+name = name or "TANG HUB"
+local tab = self:addTab({ Name = "Credits" })
+tab:addGroup({ Title = "Credits" })
+tab:addParagraph({ Title = name, Text = "Created by " .. name .. "." })
+return tab
+end
+Library.Window = Window
+pcall(function()
+getgenv().TangHub = Library
+getgenv().MacUI = Library
+end)
+Tab.addColorPicker = Tab.addColorpicker
+Tab.addTextBox = Tab.addTextbox
+Tab.addMultiDropDown = Tab.addMultiDropdown
+Tab.addDropDown = Tab.addDropdown
+local function buildMenu()
+local environment = getgenv and getgenv() or _G
+local window = Library.new({ Title = "TANG HUB", Subtitle = "Script Hub", Logo = environment.TangHubLogo })
+Library.window = window
+Library.tabs = {}
+task.defer(function()
+window:addSettings()
+window:addCredits("TANG HUB")
+if not window.currentTab and window.tabs[1] then
+window:selectTab(window.tabs[1])
+end
+end)
+end
+local getEnvironment = getgenv or function()
+return _G
+end
+if not getEnvironment().TangHubLibraryOnly then
+local success, errorMessage = xpcall(buildMenu, debug.traceback)
+if not success then
+warn("[TANG HUB] " .. tostring(errorMessage))
+end
+end
+return Library
